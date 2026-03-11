@@ -1,0 +1,35 @@
+﻿---
+description: Project Development Guidelines
+globs: ["**/*"]
+alwaysApply: true
+---
+# skill-matrix-itp Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2026-03-11
+
+## Active Technologies
+
+- C# (.NET 8 LTS), TypeScript (React 18) + ASP.NET Core Web API, Entity Framework Core, MySQL provider; React, React Router (001-skill-matrix)
+
+## Project Structure
+
+```text
+backend/
+frontend/
+tests/
+```
+
+## Commands
+
+npm test; npm run lint
+
+## Code Style
+
+C# (.NET 8 LTS), TypeScript (React 18): Follow standard conventions
+
+## Recent Changes
+
+- 001-skill-matrix: Added C# (.NET 8 LTS), TypeScript (React 18) + ASP.NET Core Web API, Entity Framework Core, MySQL provider; React, React Router
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->
