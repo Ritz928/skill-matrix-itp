@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "Create a Skill Matrix module for the In Time Pro (ITP) workforce management platform to capture, track, validate, and analyze employee skills across the organization."
 
+## Clarifications
+
+### Session 2026-03-11
+
+- Q: Should every skill require a subcategory (vs optional)? → A: Yes — Subcategory is required; use a default like “General” when needed.
+- Q: What happens when an employee wants a skill not in the taxonomy? → A: Employee submits a new skill request for HR/Admin approval before it becomes selectable.
+- Q: Should employees be able to view other employees’ skills? → A: Yes — limited to team-only visibility (no org-wide directory).
+- Q: What is the source of “required skills” for gap analysis? → A: Both role/job profiles and project requirements.
+- Q: Who has final authority to mark a skill “Validated”? → A: Manager/HR final authority; peer endorsements and system insights are evidence inputs only.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Employee creates and maintains skill profile (Priority: P1)
@@ -141,60 +151,74 @@ skill-based matches and gap-driven recommendations without duplicating skill dat
   managers, HR/Admin, and leadership according to their role.
 - **FR-002**: The system MUST organize skills in a hierarchical taxonomy: **Category → Subcategory →
   Skill**.
-- **FR-003**: Each skill MUST include a clear definition that is visible wherever the skill is
+- **FR-003**: Every skill MUST belong to exactly one subcategory. If a category does not naturally
+  subdivide, the system MUST support a default subcategory (e.g., “General”) for that category.
+- **FR-004**: Each skill MUST include a clear definition that is visible wherever the skill is
   displayed.
-- **FR-004**: The system MUST support four proficiency levels: Beginner, Intermediate, Advanced,
+- **FR-005**: The system MUST support four proficiency levels: Beginner, Intermediate, Advanced,
   Expert, with descriptions consistent across the organization.
-- **FR-005**: Employees MUST be able to add skills to their profile by selecting from the taxonomy.
-- **FR-006**: Employees MUST be able to update proficiency levels for skills in their profile.
-- **FR-007**: Employees MUST be able to submit skill changes for validation.
-- **FR-008**: The system MUST show a skill’s validation status distinctly as one of: Self-assessed,
+- **FR-006**: Employees MUST be able to add skills to their profile by selecting from the taxonomy.
+- **FR-007**: Employees MUST be able to update proficiency levels for skills in their profile.
+- **FR-008**: Employees MUST be able to submit skill changes for validation.
+- **FR-009**: The system MUST show a skill’s validation status distinctly as one of: Self-assessed,
   Pending validation, Validated, Expired/Needs revalidation.
-- **FR-009**: The system MUST support multiple rating sources: self assessment, manager assessment,
+- **FR-010**: Employees MUST be able to submit a **new skill request** when a desired skill is not
+  present in the taxonomy. A request MUST include: skill name, proposed category/subcategory, and a
+  plain-language definition. Requested skills MUST NOT be selectable in employee profiles until
+  approved by HR/Admin.
+- **FR-011**: The system MUST support multiple rating sources: self assessment, manager assessment,
   peer validation, and system-generated insights.
-- **FR-010**: System-generated insights MUST be presented as suggestions and MUST NOT change an
+- **FR-012**: System-generated insights MUST be presented as suggestions and MUST NOT change an
   employee’s proficiency level without an explicit user action and a recorded validation outcome.
-- **FR-011**: The system MUST allow employees to upload certifications as evidence tied to one or
+- **FR-013**: The system MUST allow employees to upload certifications as evidence tied to one or
   more skills.
-- **FR-012**: The system MUST allow skills to be validated via: technical assessments, certification
+- **FR-014**: The system MUST allow skills to be validated via: technical assessments, certification
   uploads, project experience tagging, and periodic manager evaluations.
-- **FR-013**: The system MUST allow employees to tag project experience to skills (linking a skill
+- **FR-015**: The system MUST allow employees to tag project experience to skills (linking a skill
   to one or more projects/assignments where applicable in the platform).
-- **FR-014**: Managers MUST be able to view and act on validation requests for employees in their
+- **FR-016**: Managers MUST be able to view and act on validation requests for employees in their
   reporting hierarchy.
-- **FR-015**: Managers MUST be able to approve a requested proficiency level or approve with a
+- **FR-017**: Managers MUST be able to approve a requested proficiency level or approve with a
   modified level and provide feedback.
-- **FR-016**: The system MUST notify employees of validation outcomes (approved, modified, rejected)
+- **FR-018**: The system MUST notify employees of validation outcomes (approved, modified, rejected)
   and provide the decision details.
-- **FR-017**: HR/Admin users MUST be able to create, edit, and deactivate taxonomy elements
+- **FR-019**: HR/Admin users MUST be able to create, edit, and deactivate taxonomy elements
   (categories, subcategories, skills) without breaking access to historical employee profiles.
-- **FR-018**: HR/Admin users MUST be able to define and maintain the proficiency framework
+- **FR-020**: HR/Admin users MUST be able to define and maintain the proficiency framework
   descriptions and any organization-specific guidance associated with each level.
-- **FR-019**: The system MUST provide team-level views for managers to see skill distribution across
+- **FR-021**: The system MUST provide team-level views for managers to see skill distribution across
   their team.
-- **FR-020**: The system MUST generate analytics including: skill gap analysis, team capability
+- **FR-022**: The system MUST generate analytics including: skill gap analysis, team capability
   reports, project skill matching, and organization heatmaps.
-- **FR-021**: Analytics MUST support drill-down by organizational scope (individual, team,
+- **FR-023**: Analytics MUST support drill-down by organizational scope (individual, team,
   department, organization) consistent with the organization structure stored in ITP.
-- **FR-022**: The system MUST integrate skills data with existing ITP modules: employee profiles,
+- **FR-024**: The system MUST integrate skills data with existing ITP modules: employee profiles,
   project allocation, performance reviews, and learning/development programs.
-- **FR-023**: The system MUST display consistent skills information across modules (e.g., an
+- **FR-025**: The system MUST display consistent skills information across modules (e.g., an
   employee’s skills shown in their profile match those used for project matching).
-- **FR-024**: The system MUST provide role-based access so users can only view/edit skills and
+- **FR-026**: The system MUST provide role-based access so users can only view/edit skills and
   reports within their permitted scope.
-- **FR-025**: The system MUST keep an auditable history of changes to employee skills and validation
+- **FR-027**: The system MUST keep an auditable history of changes to employee skills and validation
   decisions (who changed what, when, and why).
-- **FR-026**: Peer validation MUST require at least **two** peers by default, and the organization
+- **FR-028**: Peer validation MUST require at least **two** peers by default, and the organization
   MUST be able to configure the minimum peer count.
-- **FR-027**: Skill validations MUST expire after a configurable period (default **12 months**). When
+- **FR-029**: Skill validations MUST expire after a configurable period (default **12 months**). When
   expired, the skill status MUST become Expired/Needs revalidation until revalidated.
-- **FR-028**: When there are conflicting ratings for a skill, the **active proficiency** displayed
+- **FR-030**: When there are conflicting ratings for a skill, the **active proficiency** displayed
   for decision-making (analytics, matching) MUST be determined by the most recent **Validated**
   decision; self/peer ratings and system insights MUST remain visible as inputs but MUST NOT override
   a validated decision without a new validation outcome.
-- **FR-029**: Leadership users MUST have read-only access to organization-level analytics and MUST
+- **FR-031**: Leadership users MUST have read-only access to organization-level analytics and MUST
   NOT be able to edit taxonomy or employee skill profiles.
-- **FR-030**: The system MUST support exporting analytics outputs in **CSV** and **PDF** formats.
+- **FR-032**: The system MUST support exporting analytics outputs in **CSV** and **PDF** formats.
+- **FR-033**: Employees MUST be able to view the skills of other employees **within their team**.
+  Employees MUST NOT have org-wide skill directory access by default.
+- **FR-034**: Skill gap analysis MUST support required skills defined by both (a) an employee’s
+  role/job profile and (b) project requirements. The system MUST allow reporting by source (role vs
+  project) when both exist.
+- **FR-035**: Only Managers and HR/Admin users MUST be able to set a skill’s status to **Validated**
+  (or change a Validated proficiency level). Peer validations and system-generated insights MUST be
+  recorded and visible as evidence inputs but MUST NOT set “Validated” without a Manager/HR decision.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -208,6 +232,10 @@ skill-based matches and gap-driven recommendations without duplicating skill dat
 - **ValidationDecision**: The outcome of a validation request (approved/modified/rejected) with feedback.
 - **EvidenceItem**: Certification, assessment result, or project experience reference tied to a skill.
 - **SkillGap**: The difference between required skills (role/project) and an employee/team’s current skills.
+- **SkillRequest**: A proposed new skill submission awaiting HR/Admin approval (name, proposed placement,
+  definition, status, decision notes).
+- **RoleSkillRequirement**: A required skill definition tied to a role/job profile (skill + target proficiency).
+- **ProjectSkillRequirement**: A required skill definition tied to a project (skill + target proficiency).
 
 ### Assumptions
 
