@@ -2,19 +2,15 @@
 ==============================================================================
 SYNC IMPACT REPORT
 ==============================================================================
-Version change: [TEMPLATE / unversioned] → 1.0.1
-Bump rationale: MAJOR then PATCH — Initial constitution authored from template;
-  then amended to align skill taxonomy to Category → Subcategory → Skill.
+Version change: 1.1.1 → 1.1.2
+Bump rationale: PATCH — Clarified approved technology stack in Technical
+  Standards & Constraints (React frontend, .NET backend, SQL database).
 
 Modified principles:
-  - I. Structured Skill Taxonomy — taxonomy clarified to Category → Subcategory → Skill
+  - N/A (wording/structure only)
 
 Added sections:
-  - Core Principles (6 principles: Skill Structure, Skill Validation,
-    User Experience, Analytics, Security & Data Privacy, Platform Integration)
-  - Technical Standards & Constraints
-  - Development Workflow & Quality Gates
-  - Governance
+  - Table of contents
 
 Removed sections:
   - N/A (template placeholders replaced, no sections removed)
@@ -39,6 +35,20 @@ Deferred TODOs:
 
 # Skill Matrix ITP Constitution
 
+## Table of contents
+
+- Core Principles
+  - I. Structured Skill Taxonomy (NON-NEGOTIABLE)
+  - II. Evidence-Based Skill Validation
+  - III. User-Centric Experience
+  - IV. Actionable Analytics
+  - V. Security & Data Privacy
+  - VI. Platform Integration
+  - VII. Design & Content Standards
+- Technical Standards & Constraints
+- Development Workflow & Quality Gates
+- Governance
+
 ## Core Principles
 
 ### I. Structured Skill Taxonomy (NON-NEGOTIABLE)
@@ -47,8 +57,8 @@ Skills in the ITP Skill Matrix MUST be organized within a three-tier taxonomy
 hierarchy: **Category → Subcategory → Skill**. No skill may exist outside this
 taxonomy.
 
-- Every skill MUST have: a system-unique identifier, a human-readable name, and
-  a plain-language definition.
+- Every skill MUST have a system-unique identifier, a human-readable name, and a
+  plain-language definition.
 - Every skill MUST belong to exactly one Subcategory, and every Subcategory MUST
   belong to exactly one Category.
 - Proficiency MUST follow the standard four-point ITP scale:
@@ -70,7 +80,7 @@ Skill claims are only as valuable as the evidence behind them. Every skill
 in a user's profile MUST carry an explicit validation state.
 
 - **Self-assessed** skills MUST be visually distinct from **validated** skills
-  in every UI surface and every API response payload — no mixing is permitted.
+  in every UI surface and every API response payload; no mixing is permitted.
 - A skill MUST be validated through at least one of:
   (a) direct manager endorsement, (b) peer endorsement (minimum two peers),
   or (c) a passed assessment tied to the skill.
@@ -95,8 +105,7 @@ MUST be reachable within **three interactions** from the module entry point.
 - Skill gap visibility MUST be proactive: the system MUST surface gaps to
   employees without requiring them to navigate to a separate report.
 - All interactive components MUST meet **WCAG 2.1 Level AA** accessibility
-  standards. Keyboard navigation and screen-reader compatibility are mandatory,
-  not optional.
+  standards. Keyboard navigation and screen-reader compatibility are mandatory.
 - The module MUST be fully responsive across desktop, tablet, and mobile
   viewports supported by ITP's platform.
 - Bulk operations (bulk skill assignment, bulk gap acknowledgement, bulk
@@ -186,8 +195,76 @@ failures and makes the platform brittle. Adapter isolation and event-driven
 contracts allow the Skill Matrix to evolve independently while remaining a
 reliable platform participant.
 
+### VII. Design & Content Standards
+
+The Skill Matrix UI MUST follow a consistent, documented design approach so that
+users can learn the module once and confidently use it across workflows and
+personas. Design decisions MUST prioritize task completion, accessibility, and
+consistency over visual novelty.
+
+#### 1. Design Principles
+
+Core rules that guide UI decisions:
+
+- **Clarity over creativity**: Prefer obvious, readable UI over clever visuals.
+- **Consistency over novelty**: Reuse established patterns before inventing new
+  ones.
+- **Reduce cognitive load**: Minimize choices, avoid unnecessary information,
+  and keep layouts predictable.
+- **User task > visual decoration**: Decorative elements MUST NOT obstruct or
+  slow primary workflows.
+
+#### 2. Design Foundations
+
+Define the base system so the UI stays consistent:
+
+- **Typography**
+  - Font family
+  - Type scale (H1–H6, Body, Caption)
+- **Color system**
+  - Primary, Secondary, Accent
+  - Success, Warning, Error
+  - Neutral palette
+  - Usage rules (when to use each color; avoid meaning ambiguity)
+- **Spacing system**
+  - Fixed spacing scale (e.g., 4, 8, 16, 24, 32)
+- **Grid system**
+  - Desktop, Tablet, Mobile grid rules
+
+#### 3. UX Patterns
+
+Standard flows MUST be defined and reused so teams do not reinvent interaction
+models:
+
+- Empty states (what to do next, not just “no data”)
+- Loading states (skeletons/spinners with clear context)
+- Error states (actionable guidance and recovery paths)
+- Confirmation dialogs (clear impact + primary/secondary actions)
+- Search & filters (consistent placement, behavior, and clear/reset actions)
+
+#### 4. Accessibility Rules
+
+Minimum standards in addition to WCAG 2.1 AA:
+
+- Text and essential UI elements MUST meet **4.5:1** contrast ratio minimum.
+- Interactive targets MUST be at least **44px** in the smallest dimension where
+  feasible.
+- All interactive flows MUST support full keyboard navigation with visible focus.
+- All form fields MUST have programmatic labels (and accessible error messages).
+
+#### 5. Content Guidelines
+
+Rules for UI text:
+
+- Use **sentence case** for labels and headings (unless a proper noun).
+- Buttons MUST use **action verbs** (e.g., “Request endorsement”, “Export CSV”).
+- Keep labels short; prefer clarity over internal terminology.
+
 ## Technical Standards & Constraints
 
+- **Technology Stack**: The Skill Matrix MUST use **React** for the frontend,
+  **.NET (ASP.NET Core)** for the backend, and a **SQL** relational database for
+  data persistence.
 - **API Design**: All Skill Matrix APIs MUST follow ITP's platform API design
   standards (versioned URL paths, consistent error envelope format, documented
   with OpenAPI 3.x).
@@ -212,7 +289,7 @@ reliable platform participant.
 - **Specification First**: No implementation work begins without an approved
   feature specification (`spec.md`) and implementation plan (`plan.md`).
 - **Constitution Check Gate**: Every plan.md MUST include a Constitution Check
-  section that explicitly maps the feature's design decisions to the six
+  section that explicitly maps the feature's design decisions to the seven
   principles above. Plans with unaddressed constitution conflicts MUST NOT
   advance to implementation.
 - **Code Review**: All pull requests require at least one peer review and one
@@ -261,4 +338,4 @@ team agreements, or prior documentation that conflicts with its content.
 - Violations discovered during audit MUST be tracked as remediation tasks and
   scheduled within the next sprint cycle.
 
-**Version**: 1.0.1 | **Ratified**: 2026-03-11 | **Last Amended**: 2026-03-11
+**Version**: 1.1.2 | **Ratified**: 2026-03-11 | **Last Amended**: 2026-03-12
