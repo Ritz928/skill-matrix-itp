@@ -30,7 +30,7 @@ description: "Task list for Skill Matrix module implementation"
 
 - [ ] T001 Create repo directory skeleton per `specs/001-skill-matrix/plan.md` in `backend/` and `frontend/`
 - [ ] T002 Initialize .NET solution in `backend/src/SkillMatrix.sln` with projects under `backend/src/SkillMatrix.{Api,Application,Domain,Infrastructure}/`
-- [ ] T003 Initialize React workspace under `frontend/` and create feature skeleton under `frontend/src/features/skill-matrix/`
+- [X] T003 Initialize React workspace under `frontend/` and create feature skeleton under `frontend/src/features/skill-matrix/`
 - [ ] T004 [P] Add backend formatting rules/config (e.g., `.editorconfig`) at `backend/.editorconfig`
 - [ ] T005 [P] Add frontend lint/format config at `frontend/.eslintrc.*` and `frontend/.prettierrc.*`
 - [ ] T006 [P] Add local env example files at `backend/.env.example` and `frontend/.env.example`
