@@ -231,6 +231,21 @@ Define the base system so the UI stays consistent:
 - **Grid system**
   - Desktop, Tablet, Mobile grid rules
 
+#### 2a. Design references (Figma Site)
+
+These pages are the canonical UI reference for layout, navigation, density, and
+visual style. Implementations SHOULD match these references unless a feature
+spec explicitly justifies a divergence.
+
+- https://spice-salt-68562254.figma.site/
+- https://spice-salt-68562254.figma.site/skill-validation
+- https://spice-salt-68562254.figma.site/team-skills
+- https://spice-salt-68562254.figma.site/skill-taxonomy
+- https://spice-salt-68562254.figma.site/skill-analytics
+- https://spice-salt-68562254.figma.site/learning-development
+- (optional / may be slow to load) https://spice-salt-68562254.figma.site/employee-skills
+- (optional / may be slow to load) https://spice-salt-68562254.figma.site/project-matching
+
 #### 3. UX Patterns
 
 Standard flows MUST be defined and reused so teams do not reinvent interaction
