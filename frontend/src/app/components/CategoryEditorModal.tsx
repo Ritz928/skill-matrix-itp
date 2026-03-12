@@ -11,7 +11,7 @@ interface CategoryEditorModalProps {
     description?: string;
     parentCategory?: string;
   };
-  onSubmit: (data: any) => void;
+  onSubmit: (data: { name: string; description?: string; parentCategory?: string }) => void;
 }
 
 export function CategoryEditorModal({ 
@@ -47,6 +47,7 @@ export function CategoryEditorModal({
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>
@@ -56,13 +57,15 @@ export function CategoryEditorModal({
         <div className="p-6 space-y-4">
           {type === "subcategory" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="category-editor-parent">
                 Parent Category *
               </label>
               <select
+                id="category-editor-parent"
                 value={parentCategory}
                 onChange={(e) => setParentCategory(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Parent category"
               >
                 <option value="">Select a category</option>
                 <option value="Development">Development</option>

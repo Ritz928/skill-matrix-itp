@@ -3,10 +3,12 @@ import { SkillBadge } from "../components/SkillBadge";
 import { ValidationStatusBadge } from "../components/ValidationStatusBadge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Filter, Download, Users } from "lucide-react";
-import { teamMembers, skillDistributionData } from "../data/mockData";
+import { useDataStore } from "../store/dataStore";
 import React from "react";
 
 export function TeamSkills() {
+  const teamMembers = useDataStore(s => s.teamMembers);
+  const skillDistributionData = useDataStore(s => s.skillDistributionData);
   return (
     <div className="p-8">
       <Breadcrumb items={["Skill Matrix", "Team Skills"]} />

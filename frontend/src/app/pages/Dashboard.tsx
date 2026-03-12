@@ -1,10 +1,12 @@
 import { Breadcrumb } from "../components/Breadcrumb";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { TrendingUp, Users, CheckCircle, Clock, Award, Target } from "lucide-react";
-import { skillDistributionData, validationStatsData } from "../data/mockData";
+import { useDataStore } from "../store/dataStore";
 import React from "react";
 
 export function Dashboard() {
+  const skillDistributionData = useDataStore(s => s.skillDistributionData);
+  const validationStatsData = useDataStore(s => s.validationStatsData);
   const stats = [
     {
       label: "Total Skills Registered",

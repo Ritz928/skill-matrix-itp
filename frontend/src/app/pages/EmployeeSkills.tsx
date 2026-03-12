@@ -3,18 +3,61 @@ import { Breadcrumb } from "../components/Breadcrumb";
 import { SkillBadge } from "../components/SkillBadge";
 import { ValidationStatusBadge } from "../components/ValidationStatusBadge";
 import { AddSkillModal } from "../components/AddSkillModal";
-import { Plus, FileText, Calendar, Award, Paperclip, ThumbsUp } from "lucide-react";
-import { employeeSkills } from "../data/mockData";
+import { Plus, FileText, Calendar, Award, Paperclip, ThumbsUp, Pencil, Trash2 } from "lucide-react";
+import { useDataStore } from "../store/dataStore";
+import type { Skill } from "../data/mockData";
 import React from "react";
+
+const CURRENT_USER_ID = "e1";
+const CURRENT_USER_NAME = "Sarah Johnson";
 
 export function EmployeeSkills() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+
+  const employeeSkills = useDataStore(s => s.employeeSkills);
+  const addSkill = useDataStore(s => s.addSkill);
+  const updateSkill = useDataStore(s => s.updateSkill);
+  const deleteSkill = useDataStore(s => s.deleteSkill);
+  const addValidationRequest = useDataStore(s => s.addValidationRequest);
+
+  const openAddModal = () => {
+    setEditingSkill(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (skill: Skill) => {
+    setEditingSkill(skill);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingSkill(null);
+  };
+
+  const handleDeleteSkill = (skill: Skill) => {
+    if (window.confirm(`Delete skill "${skill.name}"? This cannot be undone.`)) {
+      deleteSkill(skill.id);
+    }
+  };
+
+  const handleSubmitForValidation = (skill: Skill) => {
+    updateSkill(skill.id, { validationStatus: "Pending validation" });
+    addValidationRequest({
+      employeeId: CURRENT_USER_ID,
+      employeeName: CURRENT_USER_NAME,
+      skill: { ...skill, validationStatus: "Pending validation" },
+      requestedProficiency: skill.proficiencyLevel ?? "Beginner",
+      submittedDate: new Date().toISOString().slice(0, 10),
+      evidence: skill.certifications ?? []
+    });
+  };
 
   return (
     <div className="p-8">
       <Breadcrumb items={["Skill Matrix", "Employee Skills"]} />
 
-      {/* Page Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 mb-2">
@@ -25,7 +68,7 @@ export function EmployeeSkills() {
           </p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={openAddModal}
           className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
@@ -33,7 +76,6 @@ export function EmployeeSkills() {
         </button>
       </div>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <div className="flex items-center gap-3 mb-2">
@@ -74,11 +116,9 @@ export function EmployeeSkills() {
         </div>
       </div>
 
-      {/* Skills Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {employeeSkills.map((skill) => (
           <div key={skill.id} className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow">
-            {/* Skill Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -93,13 +133,11 @@ export function EmployeeSkills() {
               )}
             </div>
 
-            {/* Proficiency */}
             <div className="mb-4">
               <p className="text-sm text-gray-600 mb-2">Proficiency Level</p>
               {skill.proficiencyLevel && <SkillBadge level={skill.proficiencyLevel} />}
             </div>
 
-            {/* Experience Details */}
             <div className="grid grid-cols-2 gap-4 mb-4 pb-4 border-b border-gray-100">
               <div>
                 <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
@@ -121,7 +159,6 @@ export function EmployeeSkills() {
               </div>
             </div>
 
-            {/* Certifications & Projects */}
             {skill.certifications && skill.certifications.length > 0 && (
               <div className="mb-3">
                 <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
@@ -157,7 +194,6 @@ export function EmployeeSkills() {
               </div>
             )}
 
-            {/* Endorsements */}
             {skill.endorsements && skill.endorsements > 0 && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <ThumbsUp className="w-4 h-4 text-green-600" />
@@ -165,26 +201,42 @@ export function EmployeeSkills() {
               </div>
             )}
 
-            {/* Actions */}
             <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
-              <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
+              <button
+                onClick={() => openEditModal(skill)}
+                className="flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                <Pencil className="w-4 h-4" />
                 Edit
               </button>
               <button className="text-sm font-medium text-gray-600 hover:text-gray-700">
                 Upload Evidence
               </button>
               {skill.validationStatus === "Self-assessed" && (
-                <button className="text-sm font-medium text-green-600 hover:text-green-700">
+                <button
+                  onClick={() => handleSubmitForValidation(skill)}
+                  className="flex items-center gap-1.5 text-sm font-medium text-green-600 hover:text-green-700"
+                >
                   Submit for Validation
                 </button>
               )}
+              <button
+                onClick={() => handleDeleteSkill(skill)}
+                className="flex items-center gap-1.5 text-sm font-medium text-red-600 hover:text-red-700 ml-auto"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete
+              </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Add Skill Modal */}
-      <AddSkillModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <AddSkillModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        initialSkill={editingSkill}
+      />
     </div>
   );
 }

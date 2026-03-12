@@ -1,9 +1,10 @@
 import { Breadcrumb } from "../components/Breadcrumb";
 import { GraduationCap, BookOpen, Clock, Users, TrendingUp, Target, ArrowRight } from "lucide-react";
-import { learningRecommendations } from "../data/mockData";
+import { useDataStore } from "../store/dataStore";
 import React from "react";
 
 export function LearningDevelopment() {
+  const learningRecommendations = useDataStore(s => s.learningRecommendations);
   return (
     <div className="p-8">
       <Breadcrumb items={["Skill Matrix", "Learning & Development"]} />

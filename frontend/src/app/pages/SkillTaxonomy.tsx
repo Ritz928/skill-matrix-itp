@@ -1,18 +1,31 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Breadcrumb } from "../components/Breadcrumb";
 import { CategoryEditorModal } from "../components/CategoryEditorModal";
 import { ChevronRight, ChevronDown, Plus, Edit2, Archive, Search, FolderTree, AlertCircle } from "lucide-react";
-import { skillCategories } from "../data/mockData";
-import React from "react";
+import { useDataStore } from "../store/dataStore";
+
+type CategoryEditorSubmitData = {
+  name?: string;
+  description?: string;
+  parentCategory?: string;
+  parentSubcategory?: string;
+};
+
+type SelectedTaxonomyItem = (CategoryEditorSubmitData & {
+  id?: string;
+  subcategories?: Array<{ id: string; name: string; skills: string[] }>;
+  skills?: string[];
+}) | null;
 
 export function SkillTaxonomy() {
+  const skillCategories = useDataStore(s => s.skillCategories);
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["dev"]);
   const [expandedSubcategories, setExpandedSubcategories] = useState<string[]>(["frontend"]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [modalType, setModalType] = useState<"category" | "subcategory" | "skill">("category");
-  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [selectedItem, setSelectedItem] = useState<SelectedTaxonomyItem>(null);
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories(prev =>
@@ -30,14 +43,14 @@ export function SkillTaxonomy() {
     );
   };
 
-  const openModal = (mode: "create" | "edit", type: "category" | "subcategory" | "skill", item?: any) => {
+  const openModal = (mode: "create" | "edit", type: "category" | "subcategory" | "skill", item?: SelectedTaxonomyItem) => {
     setModalMode(mode);
     setModalType(type);
-    setSelectedItem(item);
+    setSelectedItem(item ?? null);
     setIsModalOpen(true);
   };
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (data: CategoryEditorSubmitData) => {
     console.log("Submitted:", { mode: modalMode, type: modalType, data });
     // Here you would normally save to backend
   };
@@ -110,16 +123,17 @@ export function SkillTaxonomy() {
           {/* Search and Actions */}
           <div className="flex items-center gap-4 mb-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden />
               <input
                 type="text"
                 placeholder="Search skills..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Search skills"
               />
             </div>
-            <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" type="button">
               Export Taxonomy
             </button>
           </div>
@@ -158,16 +172,18 @@ export function SkillTaxonomy() {
                       </div>
                     </button>
                     <div className="flex items-center gap-2">
-                      <button 
+                      <button
                         onClick={() => openModal("edit", "category", category)}
                         className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                        aria-label="Edit category"
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button 
+                      <button
                         onClick={() => openModal("create", "subcategory", { parentCategory: category.name })}
                         className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
                         title="Add subcategory"
+                        aria-label="Add subcategory"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -198,19 +214,21 @@ export function SkillTaxonomy() {
                               </div>
                             </button>
                             <div className="flex items-center gap-2">
-                              <button 
+                              <button
                                 onClick={() => openModal("edit", "subcategory", subcategory)}
                                 className="p-2 text-gray-600 hover:bg-gray-200 rounded-lg"
+                                aria-label="Edit subcategory"
                               >
                                 <Edit2 className="w-4 h-4" />
                               </button>
-                              <button 
-                                onClick={() => openModal("create", "skill", { 
-                                  parentCategory: category.name, 
-                                  parentSubcategory: subcategory.name 
+                              <button
+                                onClick={() => openModal("create", "skill", {
+                                  parentCategory: category.name,
+                                  parentSubcategory: subcategory.name
                                 })}
                                 className="p-2 text-gray-600 hover:bg-gray-200 rounded-lg"
                                 title="Add skill"
+                                aria-label="Add skill"
                               >
                                 <Plus className="w-4 h-4" />
                               </button>
@@ -235,13 +253,14 @@ export function SkillTaxonomy() {
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <button 
+                                    <button
                                       onClick={() => openModal("edit", "skill", { name: skill })}
                                       className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                                      aria-label="Edit skill"
                                     >
                                       <Edit2 className="w-4 h-4" />
                                     </button>
-                                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg" aria-label="Archive skill" type="button">
                                       <Archive className="w-4 h-4" />
                                     </button>
                                   </div>
@@ -333,7 +352,7 @@ export function SkillTaxonomy() {
         onClose={() => setIsModalOpen(false)}
         mode={modalMode}
         type={modalType}
-        initialData={selectedItem}
+        initialData={selectedItem ?? undefined}
         onSubmit={handleSubmit}
       />
     </div>

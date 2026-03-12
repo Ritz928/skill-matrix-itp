@@ -1,7 +1,7 @@
 import { Breadcrumb } from "../components/Breadcrumb";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 import { TrendingUp, Download, Calendar } from "lucide-react";
-import { departmentSkillData } from "../data/mockData";
+import { useDataStore } from "../store/dataStore";
 import React from "react";
 
 const radarData = [
@@ -28,6 +28,7 @@ const getHeatmapColor = (value: number) => {
 };
 
 export function SkillAnalytics() {
+  const departmentSkillData = useDataStore(s => s.departmentSkillData);
   return (
     <div className="p-8">
       <Breadcrumb items={["Skill Matrix", "Skill Analytics"]} />

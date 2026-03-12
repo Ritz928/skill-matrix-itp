@@ -1,3 +1,4 @@
+import React from "react";
 import { ValidationStatus } from "../data/mockData";
 import { CheckCircle, Clock, AlertCircle, XCircle } from "lucide-react";
 
