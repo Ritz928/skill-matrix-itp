@@ -243,8 +243,8 @@ spec explicitly justifies a divergence.
 - https://spice-salt-68562254.figma.site/skill-taxonomy
 - https://spice-salt-68562254.figma.site/skill-analytics
 - https://spice-salt-68562254.figma.site/learning-development
-- (optional / may be slow to load) https://spice-salt-68562254.figma.site/employee-skills
-- (optional / may be slow to load) https://spice-salt-68562254.figma.site/project-matching
+- https://spice-salt-68562254.figma.site/employee-skills
+- https://spice-salt-68562254.figma.site/project-matching
 
 #### 3. UX Patterns
 
