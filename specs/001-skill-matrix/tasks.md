@@ -27,14 +27,14 @@ description: "Task list for Skill Matrix module implementation"
 ## Phase 1: Setup (Shared Infrastructure)
  
 **Purpose**: Initialize repository structure and baseline tooling
- 
-- [] T001 Create repo directory skeleton per `specs/001-skill-matrix/plan.md` in `backend/` and `frontend/`
-- [] T002 Initialize .NET solution in `backend/src/SkillMatrix.sln` with projects under `backend/src/SkillMatrix.{Api,Application,Domain,Infrastructure}/`
-- [ ] T003 Initialize React workspace under `frontend/` and create feature skeleton under `frontend/src/features/skill-matrix/`
-- [x] T004 [P] Add backend formatting rules/config (e.g., `.editorconfig`) at `backend/.editorconfig`
-- [ ] T005 [P] Add frontend lint/format config at `frontend/.eslintrc.*` and `frontend/.prettierrc.*`
-- [x] T006 [P] Add local env example files at `backend/.env.example` and `frontend/.env.example`
-- [x] T007 [P] Add MySQL local dev compose file at `backend/docker-compose.mysql.yml`
+
+- [X] T001 Create repo directory skeleton per `specs/001-skill-matrix/plan.md` in `backend/` and `frontend/`
+- [X] T002 Initialize .NET solution in `backend/src/SkillMatrix.sln` with projects under `backend/src/SkillMatrix.{Api,Application,Domain,Infrastructure}/`
+- [X] T003 Initialize React workspace under `frontend/` and create feature skeleton under `frontend/src/features/skill-matrix/`
+- [ ] T004 [P] Add backend formatting rules/config (e.g., `.editorconfig`) at `backend/.editorconfig`
+- [X] T005 [P] Add frontend lint/format config at `frontend/.eslintrc.*` and `frontend/.prettierrc.*`
+- [X] T006 [P] Add local env example files at `backend/.env.example` and `frontend/.env.example`
+- [ ] T007 [P] Add MySQL local dev compose file at `backend/docker-compose.mysql.yml`
 - [ ] T008 [P] Add module README for developers at `specs/001-skill-matrix/README.md` (links to plan/spec/quickstart)
  
 ---
@@ -136,15 +136,15 @@ description: "Task list for Skill Matrix module implementation"
  
 - [ ] T063 [P] [US2] Implement notification abstraction in `backend/src/SkillMatrix.Application/Notifications/INotificationService.cs`
 - [ ] T064 [US2] Implement employee notification on decision in `backend/src/SkillMatrix.Application/Validation/Notifications/ValidationDecisionNotifier.cs`
- 
-- [ ] T065 [US2] Implement Manager Inbox page in `frontend/src/features/skill-matrix/pages/ManagerInboxPage.tsx`
-- [ ] T066 [US2] Implement review drawer (evidence preview + feedback) in `frontend/src/features/skill-matrix/components/ValidationReviewDrawer.tsx`
-- [ ] T067 [US2] Wire manager endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
- 
+
+- [X] T065 [US2] Implement Manager Inbox page in `frontend/src/features/skill-matrix/pages/ManagerInboxPage.tsx`
+- [X] T066 [US2] Implement review drawer (evidence preview + feedback) in `frontend/src/features/skill-matrix/components/ValidationReviewDrawer.tsx`
+- [X] T067 [US2] Wire manager endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
+
 - [ ] T068 [P] [US2] Implement team skill distribution query in `backend/src/SkillMatrix.Application/Reports/Queries/GetTeamSkillDistributionQuery.cs`
 - [ ] T069 [US2] Implement team skill distribution endpoint in `backend/src/SkillMatrix.Api/Controllers/ReportsController.cs`
-- [ ] T070 [US2] Implement Team Distribution view for managers in `frontend/src/features/skill-matrix/pages/TeamDistributionPage.tsx`
- 
+- [X] T070 [US2] Implement Team Distribution view for managers in `frontend/src/features/skill-matrix/pages/TeamDistributionPage.tsx`
+
 - [ ] T071 [US2] Manual smoke test: manager approves/modifies request and employee sees updated status
  
 **Checkpoint**: US2 enables a complete validation loop (employee → manager decision → employee notified)
@@ -167,12 +167,12 @@ description: "Task list for Skill Matrix module implementation"
 - [ ] T076 [P] [US3] Implement skill request review commands in `backend/src/SkillMatrix.Application/SkillRequests/Commands/`
 - [ ] T077 [US3] Implement skill request admin endpoints in `backend/src/SkillMatrix.Api/Controllers/AdminSkillRequestsController.cs`
 - [ ] T078 [US3] Emit `SkillMatrix.SkillRequestDecided` via outbox in `backend/src/SkillMatrix.Application/SkillRequests/Events/SkillRequestEventsPublisher.cs`
- 
-- [ ] T079 [US3] Implement Admin Taxonomy page in `frontend/src/features/skill-matrix/pages/AdminTaxonomyPage.tsx`
-- [ ] T080 [US3] Implement Admin Skill Requests queue in `frontend/src/features/skill-matrix/pages/AdminSkillRequestsPage.tsx`
-- [ ] T081 [US3] Implement taxonomy editor components in `frontend/src/features/skill-matrix/components/TaxonomyEditor.tsx`
-- [ ] T082 [US3] Wire admin endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
- 
+
+- [X] T079 [US3] Implement Admin Taxonomy page in `frontend/src/features/skill-matrix/pages/AdminTaxonomyPage.tsx`
+- [X] T080 [US3] Implement Admin Skill Requests queue in `frontend/src/features/skill-matrix/pages/AdminSkillRequestsPage.tsx`
+- [X] T081 [US3] Implement taxonomy editor components in `frontend/src/features/skill-matrix/components/TaxonomyEditor.tsx`
+- [X] T082 [US3] Wire admin endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
+
 - [ ] T083 [US3] Manual smoke test: admin adds a skill definition and it appears in employee taxonomy picker
 - [ ] T084 [US3] Manual smoke test: admin approves a SkillRequest and employee can select the new skill
  
@@ -197,13 +197,13 @@ description: "Task list for Skill Matrix module implementation"
 - [ ] T090 [US4] Implement `POST /exports` and `GET /exports/{id}` in `backend/src/SkillMatrix.Api/Controllers/ExportsController.cs`
 - [ ] T091 [US4] Implement export generation job runner in `backend/src/SkillMatrix.Infrastructure/Jobs/ExportJobRunner.cs`
 - [ ] T092 [US4] Ensure export audit logs are written in `backend/src/SkillMatrix.Application/Exports/ExportAudit.cs`
- 
-- [ ] T093 [US4] Implement Leadership Analytics landing page in `frontend/src/features/skill-matrix/pages/LeadershipDashboardPage.tsx`
-- [ ] T094 [US4] Implement Heatmap view UI in `frontend/src/features/skill-matrix/components/HeatmapView.tsx`
-- [ ] T095 [US4] Implement Gap analysis view UI in `frontend/src/features/skill-matrix/components/GapAnalysisView.tsx`
-- [ ] T096 [US4] Implement export workflow UI in `frontend/src/features/skill-matrix/components/ExportReportButton.tsx`
-- [ ] T097 [US4] Wire reporting/export endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
- 
+
+- [X] T093 [US4] Implement Leadership Analytics landing page in `frontend/src/features/skill-matrix/pages/LeadershipDashboardPage.tsx`
+- [X] T094 [US4] Implement Heatmap view UI in `frontend/src/features/skill-matrix/components/HeatmapView.tsx`
+- [X] T095 [US4] Implement Gap analysis view UI in `frontend/src/features/skill-matrix/components/GapAnalysisView.tsx`
+- [X] T096 [US4] Implement export workflow UI in `frontend/src/features/skill-matrix/components/ExportReportButton.tsx`
+- [X] T097 [US4] Wire reporting/export endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
+
 - [ ] T098 [US4] Manual smoke test: leadership heatmap drill-down and export CSV/PDF
  
 **Checkpoint**: US4 provides organization-level insight dashboards and exportable reporting
@@ -230,10 +230,10 @@ description: "Task list for Skill Matrix module implementation"
 - [ ] T107 [US5] Implement gap analysis role/project requirement ingestion (API or event handlers) in `backend/src/SkillMatrix.Infrastructure/Integrations/Requirements/`
  
 - [ ] T108 [US5] Ensure events from `specs/001-skill-matrix/contracts/events.md` are emitted from the correct flows in `backend/src/SkillMatrix.Application/Events/`
-- [ ] T109 [US5] Implement UI entry points from Project Allocation to candidate search results in `frontend/src/features/skill-matrix/pages/ProjectMatchingPage.tsx`
-- [ ] T110 [US5] Implement learning recommendations panel for gaps in `frontend/src/features/skill-matrix/components/LearningRecommendationsPanel.tsx`
-- [ ] T111 [US5] Wire matching/integration endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
- 
+- [X] T109 [US5] Implement UI entry points from Project Allocation to candidate search results in `frontend/src/features/skill-matrix/pages/ProjectMatchingPage.tsx`
+- [X] T110 [US5] Implement learning recommendations panel for gaps in `frontend/src/features/skill-matrix/components/LearningRecommendationsPanel.tsx`
+- [X] T111 [US5] Wire matching/integration endpoints in `frontend/src/features/skill-matrix/services/skillMatrixApi.ts`
+
 - [ ] T112 [US5] Manual smoke test: project matching returns candidates and filters by validation status/proficiency
  
 **Checkpoint**: US5 makes skills operational for staffing and development workflows

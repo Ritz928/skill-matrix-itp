@@ -2,15 +2,16 @@
 ==============================================================================
 SYNC IMPACT REPORT
 ==============================================================================
-Version change: 1.1.1 → 1.1.2
-Bump rationale: PATCH — Clarified approved technology stack in Technical
-  Standards & Constraints (React frontend, .NET backend, SQL database).
+Version change: 1.1.2 → 1.1.3
+Bump rationale: PATCH — Added QA non-negotiables to Development Workflow &
+  Quality Gates.
 
 Modified principles:
   - N/A (wording/structure only)
 
 Added sections:
   - Table of contents
+  - QA Non-Negotiables (under Development Workflow & Quality Gates)
 
 Removed sections:
   - N/A (template placeholders replaced, no sections removed)
@@ -47,6 +48,7 @@ Deferred TODOs:
   - VII. Design & Content Standards
 - Technical Standards & Constraints
 - Development Workflow & Quality Gates
+  - QA Non-Negotiables
 - Governance
 
 ## Core Principles
@@ -317,6 +319,35 @@ Rules for UI text:
   accessibility criteria are verified, observability hooks are in place, and
   documentation is updated.
 
+### QA Non-Negotiables
+
+These QA requirements are mandatory for every feature and bug-fix shipped in the
+Skill Matrix module:
+
+- **Acceptance criteria**: Every `spec.md` MUST include verifiable acceptance
+  criteria and at least one user scenario that can be executed end-to-end.
+- **Test coverage (risk-based)**: Changes MUST include automated tests at the
+  appropriate level (unit/integration/e2e) proportional to risk. Business logic
+  MUST have unit tests; API contracts MUST have integration tests. Coverage MUST
+  NOT regress below the established baseline.
+- **Regression safety**: Fixes for production issues MUST include a test that
+  would fail prior to the fix (unit/integration/e2e), unless explicitly
+  impossible; in that case the plan MUST document the reason and the alternate
+  mitigation.
+- **No known criticals**: Releases MUST NOT ship with known **Critical** or
+  **High** severity defects in the affected scope.
+- **Accessibility**: Any UI change MUST be verified against the WCAG 2.1 AA bar
+  defined above (keyboard flow, focus visibility, labels, contrast).
+- **Performance checks**: Changes impacting query paths, exports, or analytics
+  MUST be validated against the performance baselines in Technical Standards &
+  Constraints (or updated baselines approved via amendment).
+- **Data & migration safety**: Database migrations MUST be reversible or have a
+  documented rollback procedure, and MUST be validated against representative
+  data volumes.
+- **Environment parity**: Features MUST be validated in an environment that is
+  configuration-equivalent to production for auth/RBAC, integrations, and data
+  privacy controls.
+
 ## Governance
 
 This constitution is the authoritative governance document for the Skill Matrix
@@ -353,4 +384,4 @@ team agreements, or prior documentation that conflicts with its content.
 - Violations discovered during audit MUST be tracked as remediation tasks and
   scheduled within the next sprint cycle.
 
-**Version**: 1.1.2 | **Ratified**: 2026-03-11 | **Last Amended**: 2026-03-12
+**Version**: 1.1.3 | **Ratified**: 2026-03-11 | **Last Amended**: 2026-03-13
