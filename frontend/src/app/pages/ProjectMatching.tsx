@@ -48,11 +48,27 @@ export function ProjectMatching() {
     }
   }, [projectSkillRequirements, selectedProjectId]);
 
-  const handleCreateProject = (data: { projectName: string; requiredSkills: { name: string; level: string; count: number }[]; id?: string }) => {
+  const handleCreateProject = (data: { projectName: string; description?: string; department?: string; manager?: string; startDate?: string; endDate?: string; requiredSkills: { name: string; level: string; count: number }[]; id?: string }) => {
     if (data.id) {
-      updateProject(data.id, { projectName: data.projectName, requiredSkills: data.requiredSkills });
+      updateProject(data.id, {
+        projectName: data.projectName,
+        description: data.description,
+        department: data.department,
+        manager: data.manager,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        requiredSkills: data.requiredSkills
+      });
     } else {
-      addProject({ projectName: data.projectName, requiredSkills: data.requiredSkills });
+      addProject({
+        projectName: data.projectName,
+        description: data.description,
+        department: data.department,
+        manager: data.manager,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        requiredSkills: data.requiredSkills
+      });
     }
     setEditingProject(null);
     setIsCreateModalOpen(false);

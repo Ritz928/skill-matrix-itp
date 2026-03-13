@@ -43,6 +43,11 @@ export type ProjectRequiredSkill = {
 export type Project = {
   id: string;
   projectName: string;
+  description?: string;
+  department?: string;
+  manager?: string;
+  startDate?: string;
+  endDate?: string;
   requiredSkills: ProjectRequiredSkill[];
 };
 
@@ -119,8 +124,8 @@ type DataActions = {
   ) => void;
   approveRequest: (id: string, adjustedLevel: ProficiencyLevel, feedback: string) => void;
   rejectRequest: (id: string, feedback: string) => void;
-  addProject: (projectData: { projectName: string; requiredSkills: ProjectRequiredSkill[] }) => void;
-  updateProject: (id: string, projectData: { projectName?: string; requiredSkills?: ProjectRequiredSkill[] }) => void;
+  addProject: (projectData: { projectName: string; description?: string; department?: string; manager?: string; startDate?: string; endDate?: string; requiredSkills: ProjectRequiredSkill[] }) => void;
+  updateProject: (id: string, projectData: { projectName?: string; description?: string; department?: string; manager?: string; startDate?: string; endDate?: string; requiredSkills?: ProjectRequiredSkill[] }) => void;
   deleteProject: (id: string) => void;
   recomputeChartData: () => void;
 };

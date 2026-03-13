@@ -18,7 +18,16 @@ type SkillRequirement = {
 type CreateProjectModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { projectName: string; requiredSkills: ProjectRequiredSkill[]; id?: string }) => void;
+  onSubmit: (data: {
+    projectName: string;
+    description?: string;
+    department?: string;
+    manager?: string;
+    startDate?: string;
+    endDate?: string;
+    requiredSkills: ProjectRequiredSkill[];
+    id?: string;
+  }) => void;
   initialProject?: Project | null;
 };
 
@@ -38,17 +47,37 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit, initialProject }
     if (!isOpen) return;
     if (initialProject) {
       setProjectName(initialProject.projectName);
-      setSkillRequirements(
-        initialProject.requiredSkills.map((s, i) => ({
-          id: `req-${i}-${Date.now()}`,
-          category: "",
-          subcategory: "",
-          skillName: s.name,
-          proficiencyLevel: s.level as ProficiencyLevel,
-          priority: "Medium" as const,
-          count: s.count
-        }))
+      setProjectDescription(initialProject.description || "");
+      setDepartment(initialProject.department || "");
+      setStartDate(initialProject.startDate || "");
+      setEndDate(initialProject.endDate || "");
+      setProjectManager(initialProject.manager || "");
+
+      const flattenedSkills = skillCategories.flatMap(category =>
+        category.subcategories.flatMap(subcategory =>
+          subcategory.skills.map(skill => ({
+            category: category.name,
+            subcategory: subcategory.name,
+            name: skill
+          }))
+        )
       );
+
+      setSkillRequirements(
+        initialProject.requiredSkills.map((s, i) => {
+          const match = flattenedSkills.find(f => f.name.toLowerCase() === s.name.toLowerCase());
+          return {
+            id: `req-${i}-${Date.now()}`,
+            category: match ? match.category : "",
+            subcategory: match ? match.subcategory : "",
+            skillName: s.name,
+            proficiencyLevel: s.level as ProficiencyLevel,
+            priority: "Medium" as const,
+            count: s.count
+          } as SkillRequirement;
+        })
+      );
+      setCurrentStep(1);
     } else {
       setProjectName("");
       setProjectDescription("");
@@ -59,7 +88,7 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit, initialProject }
       setSkillRequirements([]);
       setCurrentStep(1);
     }
-  }, [isOpen, initialProject]);
+  }, [isOpen, initialProject, skillCategories]);
 
   const addSkillRequirement = () => {
     const newRequirement: SkillRequirement = {
@@ -105,6 +134,11 @@ export function CreateProjectModal({ isOpen, onClose, onSubmit, initialProject }
     }));
     onSubmit({
       projectName,
+      description: projectDescription,
+      department,
+      manager: projectManager,
+      startDate,
+      endDate,
       requiredSkills,
       ...(initialProject?.id && { id: initialProject.id })
     });
