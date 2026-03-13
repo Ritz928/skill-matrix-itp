@@ -309,10 +309,46 @@ export const departmentSkillData = [
 ];
 
 export const projectSkillRequirements = [
-  { id: "proj-001", projectName: "Cloud Migration Initiative", requiredSkills: [{ name: "AWS", level: "Advanced", count: 3 }, { name: "Docker", level: "Intermediate", count: 2 }, { name: "Kubernetes", level: "Advanced", count: 2 }] },
-  { id: "proj-002", projectName: "Customer Portal Redesign", requiredSkills: [{ name: "React", level: "Advanced", count: 4 }, { name: "TypeScript", level: "Intermediate", count: 4 }, { name: "Figma", level: "Intermediate", count: 2 }] },
-  { id: "proj-003", projectName: "Data Platform Modernization", requiredSkills: [{ name: "Python", level: "Advanced", count: 3 }, { name: "SQL", level: "Expert", count: 2 }, { name: "Power BI", level: "Intermediate", count: 2 }] },
-  { id: "proj-004", projectName: "Boxer", requiredSkills: [{ name: "React", level: "Expert", count: 1 }, { name: "React", level: "Intermediate", count: 1 }] }
+  {
+    id: "proj-001",
+    projectName: "Cloud Migration Initiative",
+    description: "Move core infrastructure services to AWS with container orchestration.",
+    department: "Engineering",
+    manager: "John Doe",
+    startDate: "2026-01-01",
+    endDate: "2026-06-30",
+    requiredSkills: [{ name: "AWS", level: "Advanced", count: 3 }, { name: "Docker", level: "Intermediate", count: 2 }, { name: "Kubernetes", level: "Advanced", count: 2 }]
+  },
+  {
+    id: "proj-002",
+    projectName: "Customer Portal Redesign",
+    description: "Rebuild external customer portal with new UX and performance improvements.",
+    department: "Engineering",
+    manager: "Sarah Johnson",
+    startDate: "2026-02-01",
+    endDate: "2026-07-31",
+    requiredSkills: [{ name: "React", level: "Advanced", count: 4 }, { name: "TypeScript", level: "Intermediate", count: 4 }, { name: "Figma", level: "Intermediate", count: 2 }]
+  },
+  {
+    id: "proj-003",
+    projectName: "Data Platform Modernization",
+    description: "Upgrade the analytics data platform with modern ETL and reporting pipelines.",
+    department: "Analytics",
+    manager: "Anna Williams",
+    startDate: "2026-03-01",
+    endDate: "2026-08-31",
+    requiredSkills: [{ name: "Python", level: "Advanced", count: 3 }, { name: "SQL", level: "Expert", count: 2 }, { name: "Power BI", level: "Intermediate", count: 2 }]
+  },
+  {
+    id: "proj-004",
+    projectName: "Boxer",
+    description: "Deliver a rapid React-based proof of concept with high performance and validation.",
+    department: "Engineering",
+    manager: "Michael Chen",
+    startDate: "2026-03-01",
+    endDate: "2026-04-30",
+    requiredSkills: [{ name: "React", level: "Expert", count: 1 }]
+  }
 ];
 
 export const learningRecommendations = [

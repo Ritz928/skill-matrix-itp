@@ -23,7 +23,7 @@ const managerNavigationItems = [
   { path: "/employee-skills", label: "Employee Skills", icon: User },
   { path: "/team-skills", label: "Team Skills", icon: Users },
   { path: "/skill-validation", label: "Skill Validation", icon: CheckCircle },
-  { path: "/skill-taxonomy", label: "Skill Taxonomy", icon: FolderTree },
+  //{ path: "/skill-taxonomy", label: "Skill Taxonomy", icon: FolderTree },
   { path: "/skill-analytics", label: "Skill Analytics", icon: BarChart3 },
   { path: "/project-matching", label: "Project Skill Matching", icon: Briefcase },
   { path: "/learning-development", label: "Learning & Development", icon: GraduationCap }
