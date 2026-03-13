@@ -143,6 +143,113 @@ skill-based matches and gap-driven recommendations without duplicating skill dat
 - What happens when validations expire and the employee does not revalidate?
 - What happens when a user lacks permission to view a team/unit but attempts to access reports?
 
+### Test Cases *(derived from scenarios/requirements)*
+
+> These test cases are written to be implementable as manual or automated tests.
+> IDs are stable so they can be referenced in QA reports.
+
+#### Employee skill profile
+
+- **TC-EMP-001 — Add first skill**
+  - **Preconditions**: Employee is signed in; taxonomy contains at least one skill; profile is empty.
+  - **Steps**: Open My Skill Profile → Add skill from taxonomy → Select proficiency → Save.
+  - **Expected**: Skill appears in profile with selected proficiency; status is **Self-assessed**.
+
+- **TC-EMP-002 — Submit validation with certification evidence**
+  - **Preconditions**: Employee has a **Self-assessed** skill.
+  - **Steps**: Open skill → Upload certification evidence → Submit for validation.
+  - **Expected**: Status becomes **Pending validation**; submitted evidence is visible to the employee.
+
+- **TC-EMP-003 — Change a validated skill proficiency triggers revalidation**
+  - **Preconditions**: Employee has a **Validated** skill.
+  - **Steps**: Change proficiency level → Save.
+  - **Expected**: Change is recorded; status returns to **Pending validation** until re-approved.
+
+- **TC-EMP-004 — Request a new skill not in taxonomy**
+  - **Preconditions**: Employee is signed in; desired skill does not exist in taxonomy.
+  - **Steps**: Attempt to add skill → Choose “Request new skill” → Provide name, proposed category/subcategory, definition → Submit.
+  - **Expected**: A **SkillRequest** is created; requested skill is **not selectable** in profiles until HR/Admin approves it.
+
+#### Manager validation
+
+- **TC-MGR-001 — Approve validation as submitted**
+  - **Preconditions**: Manager has a pending validation request from a report.
+  - **Steps**: Open validation queue → Review evidence → Approve.
+  - **Expected**: Employee skill becomes **Validated** at requested level; employee is notified; team view reflects the result.
+
+- **TC-MGR-002 — Approve with modified proficiency and feedback**
+  - **Preconditions**: Manager has a pending validation request from a report.
+  - **Steps**: Open request → Change proficiency level → Add feedback → Approve.
+  - **Expected**: Employee skill becomes **Validated** at manager-set level; employee can see the feedback; decision is audit-recorded.
+
+- **TC-MGR-003 — Reject validation request**
+  - **Preconditions**: Manager has a pending validation request from a report.
+  - **Steps**: Open request → Reject → Provide rationale/feedback.
+  - **Expected**: Skill does not become **Validated**; employee is notified of rejection and reason; decision is audit-recorded.
+
+#### HR/Admin taxonomy & proficiency framework
+
+- **TC-ADM-001 — Create category/subcategory/skill with definition**
+  - **Preconditions**: HR/Admin user is signed in and has taxonomy edit permission.
+  - **Steps**: Create category → Create subcategory → Create skill with definition → Save/publish.
+  - **Expected**: Employees can select the new skill in their profiles; definition is visible wherever displayed.
+
+- **TC-ADM-002 — Update skill definition is reflected everywhere**
+  - **Preconditions**: Skill exists and is used in at least one employee profile.
+  - **Steps**: Update the skill definition → Save.
+  - **Expected**: Updated definition is displayed consistently anywhere the skill appears (profiles, validation views, analytics).
+
+- **TC-ADM-003 — Deactivate/deprecate a skill without breaking history**
+  - **Preconditions**: Skill exists and has historical usage.
+  - **Steps**: Deactivate/deprecate the skill.
+  - **Expected**: Skill is not selectable for new additions; historical records remain accessible for profiles and audit trails.
+
+#### Leadership analytics & exports
+
+- **TC-LEAD-001 — View heatmap and drill down by organizational scope**
+  - **Preconditions**: Leadership user is signed in; organization has multiple units/teams; skill data exists.
+  - **Steps**: Open analytics dashboard → Select org unit → View heatmap → Drill down to team.
+  - **Expected**: Heatmap shows proficiency distribution and self-assessed vs validated distinction; drill-down works within permitted scope.
+
+- **TC-LEAD-002 — Export capability report with correct scope**
+  - **Preconditions**: Leadership user is viewing a capability report.
+  - **Steps**: Export → Select format (CSV/PDF) → Select scope (team/department/org) → Confirm export.
+  - **Expected**: Export file matches requested format and scope only; export is audit-logged (who/when/scope/count).
+
+#### Cross-module matching and development actions
+
+- **TC-PROJ-001 — Project candidate matching respects validation status**
+  - **Preconditions**: Project requirements exist; employees have both self-assessed and validated skills.
+  - **Steps**: Open project staffing search → Search candidates → Filter by validation status/proficiency.
+  - **Expected**: Results include matches based on validated and self-assessed skills and allow filtering by status and proficiency.
+
+- **TC-LND-001 — Skill gaps drive learning recommendations (when available)**
+  - **Preconditions**: Employee has identified skill gaps; learning programs exist in platform.
+  - **Steps**: Open skill gap view → Navigate to learning/development recommendations.
+  - **Expected**: Recommended actions align to the gap; if no programs exist, gaps are still visible without recommendations.
+
+#### Edge-case validations and permissions
+
+- **TC-EDGE-001 — Conflicting ratings resolve to most recent validated decision**
+  - **Preconditions**: Skill has self rating, peer inputs, and at least one validated decision.
+  - **Steps**: View the skill in analytics/matching contexts.
+  - **Expected**: Active proficiency used for decision-making is the most recent **Validated** outcome; other ratings remain visible as inputs.
+
+- **TC-EDGE-002 — Validation expiry changes status and triggers revalidation flow**
+  - **Preconditions**: A skill is validated and reaches expiry (default 12 months or configured).
+  - **Steps**: Reach expiry date → Open employee profile.
+  - **Expected**: Status becomes **Expired/Needs revalidation**; employee (and manager where applicable) is notified; revalidation can be initiated.
+
+- **TC-EDGE-003 — Team-only skill visibility enforced**
+  - **Preconditions**: Employee A and Employee B are in different teams.
+  - **Steps**: Employee A attempts to view Employee B’s skills.
+  - **Expected**: Access is denied/limited per policy; no org-wide directory access is provided by default.
+
+- **TC-EDGE-004 — Unauthorized analytics access denied**
+  - **Preconditions**: User lacks permission to view a specific team/unit.
+  - **Steps**: Attempt to access that unit’s report or export.
+  - **Expected**: Access is denied with an actionable message; no data is returned.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
