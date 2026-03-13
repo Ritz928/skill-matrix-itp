@@ -3,6 +3,7 @@ import { Breadcrumb } from "../components/Breadcrumb";
 import { SkillBadge } from "../components/SkillBadge";
 import { ValidationStatusBadge } from "../components/ValidationStatusBadge";
 import { AddSkillModal } from "../components/AddSkillModal";
+import { ConfirmModal } from "../components/ConfirmModal";
 import { Plus, FileText, Calendar, Award, Paperclip, ThumbsUp, Pencil, Trash2 } from "lucide-react";
 import { useDataStore } from "../store/dataStore";
 import { useAuthStore } from "../store/authStore";
@@ -12,6 +13,7 @@ import React from "react";
 export function EmployeeSkills() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+  const [skillToDelete, setSkillToDelete] = useState<Skill | null>(null);
 
   const user = useAuthStore((s) => s.user);
   const teamMembers = useDataStore((s) => s.teamMembers);
@@ -37,11 +39,15 @@ export function EmployeeSkills() {
     setEditingSkill(null);
   };
 
-  const handleDeleteSkill = (skill: Skill) => {
+  const handleDeleteSkillClick = (skill: Skill) => {
     if (!user) return;
-    if (window.confirm(`Delete skill "${skill.name}"? This cannot be undone.`)) {
-      deleteSkill(user.id, skill.id);
-    }
+    setSkillToDelete(skill);
+  };
+
+  const handleConfirmDeleteSkill = () => {
+    if (!user || !skillToDelete) return;
+    deleteSkill(user.id, skillToDelete.id);
+    setSkillToDelete(null);
   };
 
   const handleSubmitForValidation = (skill: Skill) => {
@@ -240,7 +246,7 @@ export function EmployeeSkills() {
                 </button>
               )}
               <button
-                onClick={() => handleDeleteSkill(skill)}
+                onClick={() => handleDeleteSkillClick(skill)}
                 className="flex items-center gap-1.5 text-sm font-medium text-red-600 hover:text-red-700 ml-auto"
               >
                 <Trash2 className="w-4 h-4" />
@@ -257,6 +263,20 @@ export function EmployeeSkills() {
         initialSkill={editingSkill}
         employeeId={user.id}
         onSave={handleSaveSkill}
+      />
+
+      <ConfirmModal
+        isOpen={skillToDelete !== null}
+        onClose={() => setSkillToDelete(null)}
+        title="Delete skill?"
+        message={
+          skillToDelete
+            ? `Delete skill "${skillToDelete.name}"? This cannot be undone.`
+            : ""
+        }
+        confirmLabel="Delete"
+        onConfirm={handleConfirmDeleteSkill}
+        variant="danger"
       />
     </div>
   );

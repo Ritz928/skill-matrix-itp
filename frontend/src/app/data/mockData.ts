@@ -311,7 +311,8 @@ export const departmentSkillData = [
 export const projectSkillRequirements = [
   { id: "proj-001", projectName: "Cloud Migration Initiative", requiredSkills: [{ name: "AWS", level: "Advanced", count: 3 }, { name: "Docker", level: "Intermediate", count: 2 }, { name: "Kubernetes", level: "Advanced", count: 2 }] },
   { id: "proj-002", projectName: "Customer Portal Redesign", requiredSkills: [{ name: "React", level: "Advanced", count: 4 }, { name: "TypeScript", level: "Intermediate", count: 4 }, { name: "Figma", level: "Intermediate", count: 2 }] },
-  { id: "proj-003", projectName: "Data Platform Modernization", requiredSkills: [{ name: "Python", level: "Advanced", count: 3 }, { name: "SQL", level: "Expert", count: 2 }, { name: "Power BI", level: "Intermediate", count: 2 }] }
+  { id: "proj-003", projectName: "Data Platform Modernization", requiredSkills: [{ name: "Python", level: "Advanced", count: 3 }, { name: "SQL", level: "Expert", count: 2 }, { name: "Power BI", level: "Intermediate", count: 2 }] },
+  { id: "proj-004", projectName: "Boxer", requiredSkills: [{ name: "React", level: "Expert", count: 1 }, { name: "React", level: "Intermediate", count: 1 }] }
 ];
 
 export const learningRecommendations = [

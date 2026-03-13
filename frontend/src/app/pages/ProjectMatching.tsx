@@ -3,19 +3,19 @@ import { Breadcrumb } from "../components/Breadcrumb";
 import { SkillBadge } from "../components/SkillBadge";
 import { ValidationStatusBadge } from "../components/ValidationStatusBadge";
 import { CreateProjectModal } from "../components/CreateProjectModal";
+import { ConfirmModal } from "../components/ConfirmModal";
 import { Search, Plus, Award, CheckCircle, Target, Filter, Users as UsersIcon, Briefcase, Pencil, Trash2 } from "lucide-react";
 import { useDataStore } from "../store/dataStore";
 import type { Project } from "../store/dataStore";
 
-const matchScores = [
-  { employeeId: "emp-002", score: 95 },
-  { employeeId: "emp-001", score: 85 },
-  { employeeId: "emp-003", score: 75 },
-  { employeeId: "emp-004", score: 60 },
-  { employeeId: "emp-008", score: 92 },
-  { employeeId: "emp-006", score: 70 },
-  { employeeId: "emp-010", score: 78 },
-];
+const PROFICIENCY_RANK: Record<string, number> = {
+  Beginner: 1,
+  Intermediate: 2,
+  Advanced: 3,
+  Expert: 4
+};
+
+const getProficiencyRank = (level?: string) => PROFICIENCY_RANK[level ?? ""] ?? 0;
 
 export function ProjectMatching() {
   const teamMembers = useDataStore(s => s.teamMembers);
@@ -32,6 +32,7 @@ export function ProjectMatching() {
   const [filterDepartment, setFilterDepartment] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
   const selectedProject =
     projectSkillRequirements.find(p => p.id === selectedProjectId) ??
@@ -72,14 +73,18 @@ export function ProjectMatching() {
     setEditingProject(null);
   };
 
-  const handleDeleteProject = (project: Project) => {
-    if (window.confirm(`Delete project "${project.projectName}"? This cannot be undone.`)) {
-      if (selectedProjectId === project.id) {
-        const next = projectSkillRequirements.filter(p => p.id !== project.id);
-        setSelectedProjectId(next[0]?.id ?? null);
-      }
-      deleteProject(project.id);
+  const handleDeleteProjectClick = (project: Project) => {
+    setProjectToDelete(project);
+  };
+
+  const handleConfirmDeleteProject = () => {
+    if (!projectToDelete) return;
+    if (selectedProjectId === projectToDelete.id) {
+      const next = projectSkillRequirements.filter(p => p.id !== projectToDelete.id);
+      setSelectedProjectId(next[0]?.id ?? null);
     }
+    deleteProject(projectToDelete.id);
+    setProjectToDelete(null);
   };
 
   const toggleEmployeeSelection = (employeeId: string) => {
@@ -90,12 +95,59 @@ export function ProjectMatching() {
     );
   };
 
-  const filteredMatches = matchScores.filter(match => {
-    const employee = teamMembers.find(m => m.id === match.employeeId);
-    if (!employee) return false;
-    if (filterDepartment !== "All" && employee.department !== filterDepartment) return false;
+  const buildProjectMatchData = (employee: typeof teamMembers[number], project: Project | null) => {
+    if (!project) return null;
+    const totalRequired = project.requiredSkills.reduce((sum, req) => sum + req.count, 0);
+    let matchedUnits = 0;
+
+    project.requiredSkills.forEach(req => {
+      const employeeSkill = employee.skills.find(s => s.name.toLowerCase() === req.name.toLowerCase());
+      if (!employeeSkill) return;
+      const employeeRank = getProficiencyRank(employeeSkill.proficiencyLevel);
+      const reqRank = getProficiencyRank(req.level);
+      if (employeeRank >= reqRank) {
+        matchedUnits += req.count;
+      }
+    });
+
+    const score = totalRequired ? Math.round((matchedUnits / totalRequired) * 100) : 0;
+    const relevantSkills = employee.skills.filter(s =>
+      project.requiredSkills.some(req => req.name.toLowerCase() === s.name.toLowerCase())
+    );
+
+    return { employee, score, matchedUnits, totalRequired, relevantSkills };
+  };
+
+  const projectMatches = selectedProject
+    ? teamMembers
+      .map(employee => buildProjectMatchData(employee, selectedProject))
+      .filter((m): m is NonNullable<typeof m> => m !== null)
+      .filter(match => match.score > 0)
+      .sort((a, b) => b.score - a.score)
+    : [];
+
+  const filteredMatches = projectMatches.filter(match => {
+    if (filterDepartment !== "All" && match.employee.department !== filterDepartment) return false;
+    if (
+      filterProficiency !== "All" &&
+      !match.relevantSkills.some(s => s.proficiencyLevel === filterProficiency)
+    ) {
+      return false;
+    }
+    if (
+      filterValidation !== "All" &&
+      !match.relevantSkills.some(s => s.validationStatus === filterValidation)
+    ) {
+      return false;
+    }
     return true;
   });
+
+  const totalMatches = projectMatches.length;
+  const avgMatchScore = totalMatches
+    ? Math.round(projectMatches.reduce((sum, m) => sum + m.score, 0) / totalMatches)
+    : 0;
+  const resourcesAssigned = selectedEmployees.length;
 
   return (
     <div className="p-8">
@@ -132,7 +184,7 @@ export function ProjectMatching() {
             <UsersIcon className="w-5 h-5 text-green-600" />
             <p className="text-sm text-gray-600">Total Matches Found</p>
           </div>
-          <p className="text-3xl font-semibold text-gray-900">{filteredMatches.length}</p>
+          <p className="text-3xl font-semibold text-gray-900">{totalMatches}</p>
         </div>
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <div className="flex items-center gap-3 mb-2">
@@ -140,7 +192,7 @@ export function ProjectMatching() {
             <p className="text-sm text-gray-600">Avg. Match Score</p>
           </div>
           <p className="text-3xl font-semibold text-gray-900">
-            {matchScores.length ? Math.round(matchScores.reduce((sum, m) => sum + m.score, 0) / matchScores.length) : 0}%
+            {avgMatchScore}%
           </p>
         </div>
         <div className="bg-white rounded-xl p-6 border border-gray-200">
@@ -148,7 +200,7 @@ export function ProjectMatching() {
             <CheckCircle className="w-5 h-5 text-amber-600" />
             <p className="text-sm text-gray-600">Resources Assigned</p>
           </div>
-          <p className="text-3xl font-semibold text-gray-900">24</p>
+          <p className="text-3xl font-semibold text-gray-900">{resourcesAssigned}</p>
         </div>
       </div>
 
@@ -205,7 +257,7 @@ export function ProjectMatching() {
                     <Pencil className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={(e) => { e.stopPropagation(); handleDeleteProject(project); }}
+                    onClick={(e) => { e.stopPropagation(); handleDeleteProjectClick(project); }}
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                     title="Delete project"
                   >
@@ -252,7 +304,7 @@ export function ProjectMatching() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDeleteProject(selectedProject)}
+                      onClick={() => handleDeleteProjectClick(selectedProject)}
                       className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -368,8 +420,7 @@ export function ProjectMatching() {
 
                 <div className="divide-y divide-gray-200">
                   {filteredMatches.map((match) => {
-                    const employee = teamMembers.find(m => m.id === match.employeeId);
-                    if (!employee) return null;
+                    const employee = match.employee;
                     const isSelected = selectedEmployees.includes(employee.id);
                     return (
                       <div key={employee.id} className={`p-6 transition-colors ${isSelected ? "bg-blue-50" : "hover:bg-gray-50"}`}>
@@ -464,6 +515,20 @@ export function ProjectMatching() {
         onClose={handleCloseModal}
         onSubmit={handleCreateProject}
         initialProject={editingProject ?? undefined}
+      />
+
+      <ConfirmModal
+        isOpen={projectToDelete !== null}
+        onClose={() => setProjectToDelete(null)}
+        title="Delete project?"
+        message={
+          projectToDelete
+            ? `Delete project "${projectToDelete.projectName}"? This cannot be undone.`
+            : ""
+        }
+        confirmLabel="Delete"
+        onConfirm={handleConfirmDeleteProject}
+        variant="danger"
       />
     </div>
   );
