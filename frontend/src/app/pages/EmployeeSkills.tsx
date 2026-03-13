@@ -5,21 +5,22 @@ import { ValidationStatusBadge } from "../components/ValidationStatusBadge";
 import { AddSkillModal } from "../components/AddSkillModal";
 import { Plus, FileText, Calendar, Award, Paperclip, ThumbsUp, Pencil, Trash2 } from "lucide-react";
 import { useDataStore } from "../store/dataStore";
+import { useAuthStore } from "../store/authStore";
 import type { Skill } from "../data/mockData";
 import React from "react";
-
-const CURRENT_USER_ID = "e1";
-const CURRENT_USER_NAME = "Sarah Johnson";
 
 export function EmployeeSkills() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
 
-  const employeeSkills = useDataStore(s => s.employeeSkills);
-  const addSkill = useDataStore(s => s.addSkill);
-  const updateSkill = useDataStore(s => s.updateSkill);
-  const deleteSkill = useDataStore(s => s.deleteSkill);
-  const addValidationRequest = useDataStore(s => s.addValidationRequest);
+  const user = useAuthStore((s) => s.user);
+  const teamMembers = useDataStore((s) => s.teamMembers);
+  const addSkill = useDataStore((s) => s.addSkill);
+  const updateSkill = useDataStore((s) => s.updateSkill);
+  const deleteSkill = useDataStore((s) => s.deleteSkill);
+  const addValidationRequest = useDataStore((s) => s.addValidationRequest);
+
+  const mySkills = user ? (teamMembers.find((m) => m.id === user.id)?.skills ?? []) : [];
 
   const openAddModal = () => {
     setEditingSkill(null);
@@ -37,22 +38,40 @@ export function EmployeeSkills() {
   };
 
   const handleDeleteSkill = (skill: Skill) => {
+    if (!user) return;
     if (window.confirm(`Delete skill "${skill.name}"? This cannot be undone.`)) {
-      deleteSkill(skill.id);
+      deleteSkill(user.id, skill.id);
     }
   };
 
   const handleSubmitForValidation = (skill: Skill) => {
-    updateSkill(skill.id, { validationStatus: "Pending validation" });
+    if (!user) return;
+    updateSkill(user.id, skill.id, { validationStatus: "Pending validation" });
     addValidationRequest({
-      employeeId: CURRENT_USER_ID,
-      employeeName: CURRENT_USER_NAME,
+      employeeId: user.id,
+      employeeName: user.name,
       skill: { ...skill, validationStatus: "Pending validation" },
       requestedProficiency: skill.proficiencyLevel ?? "Beginner",
       submittedDate: new Date().toISOString().slice(0, 10),
       evidence: skill.certifications ?? []
     });
   };
+
+  const handleSaveSkill = (savedSkill: Skill | undefined, requestValidation?: boolean) => {
+    if (!user || !savedSkill) return;
+    if (requestValidation) {
+      addValidationRequest({
+        employeeId: user.id,
+        employeeName: user.name,
+        skill: { ...savedSkill, validationStatus: "Pending validation" },
+        requestedProficiency: savedSkill.proficiencyLevel ?? "Beginner",
+        submittedDate: new Date().toISOString().slice(0, 10),
+        evidence: savedSkill.certifications ?? []
+      });
+    }
+  };
+
+  if (!user) return null;
 
   return (
     <div className="p-8">
@@ -82,7 +101,7 @@ export function EmployeeSkills() {
             <Award className="w-5 h-5 text-blue-600" />
             <p className="text-sm text-gray-600">Total Skills</p>
           </div>
-          <p className="text-3xl font-semibold text-gray-900">{employeeSkills.length}</p>
+          <p className="text-3xl font-semibold text-gray-900">{mySkills.length}</p>
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-gray-200">
@@ -91,7 +110,7 @@ export function EmployeeSkills() {
             <p className="text-sm text-gray-600">Validated</p>
           </div>
           <p className="text-3xl font-semibold text-gray-900">
-            {employeeSkills.filter(s => s.validationStatus === "Validated").length}
+            {mySkills.filter((s) => s.validationStatus === "Validated").length}
           </p>
         </div>
 
@@ -101,7 +120,7 @@ export function EmployeeSkills() {
             <p className="text-sm text-gray-600">Pending</p>
           </div>
           <p className="text-3xl font-semibold text-gray-900">
-            {employeeSkills.filter(s => s.validationStatus === "Pending validation").length}
+            {mySkills.filter((s) => s.validationStatus === "Pending validation").length}
           </p>
         </div>
 
@@ -111,13 +130,13 @@ export function EmployeeSkills() {
             <p className="text-sm text-gray-600">Endorsements</p>
           </div>
           <p className="text-3xl font-semibold text-gray-900">
-            {employeeSkills.reduce((sum, skill) => sum + (skill.endorsements || 0), 0)}
+            {mySkills.reduce((sum, skill) => sum + (skill.endorsements || 0), 0)}
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {employeeSkills.map((skill) => (
+        {mySkills.map((skill) => (
           <div key={skill.id} className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
@@ -236,6 +255,8 @@ export function EmployeeSkills() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         initialSkill={editingSkill}
+        employeeId={user.id}
+        onSave={handleSaveSkill}
       />
     </div>
   );

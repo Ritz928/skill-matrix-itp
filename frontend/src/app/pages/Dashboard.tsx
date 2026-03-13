@@ -1,42 +1,51 @@
 import { Breadcrumb } from "../components/Breadcrumb";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { TrendingUp, Users, CheckCircle, Clock, Award, Target } from "lucide-react";
+import { Users, CheckCircle, Clock, Award, Target } from "lucide-react";
 import { useDataStore } from "../store/dataStore";
+import { Link } from "react-router";
 import React from "react";
 
 export function Dashboard() {
-  const skillDistributionData = useDataStore(s => s.skillDistributionData);
-  const validationStatsData = useDataStore(s => s.validationStatsData);
+  const teamMembers = useDataStore((s) => s.teamMembers);
+  const validationRequests = useDataStore((s) => s.validationRequests);
+  const skillDistributionData = useDataStore((s) => s.skillDistributionData);
+  const validationStatsData = useDataStore((s) => s.validationStatsData);
+
+  const totalSkills = teamMembers.reduce((sum, m) => sum + m.skills.length, 0);
+  const activeEmployees = teamMembers.length;
+  const validatedCount = validationStatsData.find((s) => s.name === "Validated")?.value ?? 0;
+  const pendingCount = validationRequests.length;
+
   const stats = [
     {
       label: "Total Skills Registered",
-      value: "260",
-      change: "+12%",
-      trend: "up",
+      value: String(totalSkills),
+      change: "",
+      trend: "neutral" as const,
       icon: Award,
       color: "blue"
     },
     {
       label: "Active Employees",
-      value: "145",
-      change: "+5%",
-      trend: "up",
+      value: String(activeEmployees),
+      change: "",
+      trend: "neutral" as const,
       icon: Users,
       color: "green"
     },
     {
       label: "Validated Skills",
-      value: "145",
-      change: "55%",
-      trend: "neutral",
+      value: String(validatedCount),
+      change: "",
+      trend: "neutral" as const,
       icon: CheckCircle,
       color: "purple"
     },
     {
       label: "Pending Validations",
-      value: "32",
-      change: "-8%",
-      trend: "down",
+      value: String(pendingCount),
+      change: "",
+      trend: "neutral" as const,
       icon: Clock,
       color: "amber"
     }
@@ -73,13 +82,15 @@ export function Dashboard() {
                 <div className={`p-3 rounded-lg ${colorClasses[stat.color as keyof typeof colorClasses]}`}>
                   <Icon className="w-6 h-6" />
                 </div>
-                <span className={`text-sm font-medium ${
-                  stat.trend === "up" ? "text-green-600" : 
-                  stat.trend === "down" ? "text-red-600" : 
-                  "text-gray-600"
-                }`}>
-                  {stat.change}
-                </span>
+                {stat.change && (
+                  <span className={`text-sm font-medium ${
+                    stat.trend === "up" ? "text-green-600" :
+                    stat.trend === "down" ? "text-red-600" :
+                    "text-gray-600"
+                  }`}>
+                    {stat.change}
+                  </span>
+                )}
               </div>
               <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
               <p className="text-3xl font-semibold text-gray-900">{stat.value}</p>
@@ -145,7 +156,10 @@ export function Dashboard() {
             Quick Actions
           </h3>
           <div className="space-y-3">
-            <button className="w-full flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-left">
+            <Link
+              to="/employee-skills"
+              className="w-full flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-left"
+            >
               <div className="p-2 bg-blue-600 rounded-lg">
                 <Award className="w-5 h-5 text-white" />
               </div>
@@ -153,19 +167,27 @@ export function Dashboard() {
                 <p className="font-medium text-gray-900">Add New Skill</p>
                 <p className="text-sm text-gray-600">Register a new skill to your profile</p>
               </div>
-            </button>
+            </Link>
 
-            <button className="w-full flex items-center gap-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors text-left">
+            <Link
+              to="/skill-validation"
+              className="w-full flex items-center gap-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors text-left"
+            >
               <div className="p-2 bg-purple-600 rounded-lg">
                 <CheckCircle className="w-5 h-5 text-white" />
               </div>
               <div>
                 <p className="font-medium text-gray-900">Review Validations</p>
-                <p className="text-sm text-gray-600">32 pending validation requests</p>
+                <p className="text-sm text-gray-600">
+                  {pendingCount} pending validation request{pendingCount !== 1 ? "s" : ""}
+                </p>
               </div>
-            </button>
+            </Link>
 
-            <button className="w-full flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors text-left">
+            <Link
+              to="/project-matching"
+              className="w-full flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors text-left"
+            >
               <div className="p-2 bg-green-600 rounded-lg">
                 <Target className="w-5 h-5 text-white" />
               </div>
@@ -173,7 +195,7 @@ export function Dashboard() {
                 <p className="font-medium text-gray-900">Match Project Skills</p>
                 <p className="text-sm text-gray-600">Find employees for new projects</p>
               </div>
-            </button>
+            </Link>
           </div>
         </div>
 

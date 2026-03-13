@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Skill, Employee, ValidationRequest, ProficiencyLevel, ValidationStatus } from "../data/mockData";
 import {
-  employeeSkills as initialEmployeeSkills,
   validationRequests as initialValidationRequests,
   teamMembers as initialTeamMembers,
   skillCategories as initialSkillCategories,
@@ -48,7 +47,6 @@ export type Project = {
 };
 
 type DataState = {
-  employeeSkills: Skill[];
   validationRequests: ValidationRequest[];
   teamMembers: Employee[];
   skillCategories: typeof initialSkillCategories;
@@ -59,11 +57,11 @@ type DataState = {
   learningRecommendations: typeof initialLearningRecommendations;
 };
 
-function recomputeSkillDistribution(employeeSkills: Skill[]): SkillDistributionRow[] {
+function recomputeSkillDistribution(skills: Skill[]): SkillDistributionRow[] {
   const bySkill = new Map<string, { beginner: number; intermediate: number; advanced: number; expert: number }>();
   const levels: (keyof SkillDistributionRow)[] = ["beginner", "intermediate", "advanced", "expert"];
 
-  for (const s of employeeSkills) {
+  for (const s of skills) {
     const name = s.name;
     if (!bySkill.has(name)) {
       bySkill.set(name, { beginner: 0, intermediate: 0, advanced: 0, expert: 0 });
@@ -88,14 +86,14 @@ const VALIDATION_STATS_COLORS: Record<string, string> = {
   Rejected: "#ef4444"
 };
 
-function recomputeValidationStats(employeeSkills: Skill[]): ValidationStatsRow[] {
+function recomputeValidationStats(skills: Skill[]): ValidationStatsRow[] {
   const counts: Record<string, number> = {
     Validated: 0,
     Pending: 0,
     "Self-assessed": 0,
     Rejected: 0
   };
-  for (const s of employeeSkills) {
+  for (const s of skills) {
     const status = s.validationStatus ?? "Self-assessed";
     const key = status === "Pending validation" ? "Pending" : status;
     if (key in counts) {
@@ -111,9 +109,9 @@ function recomputeValidationStats(employeeSkills: Skill[]): ValidationStatsRow[]
 }
 
 type DataActions = {
-  addSkill: (skill: Omit<Skill, "id">) => void;
-  updateSkill: (id: string, updates: Partial<Skill>) => void;
-  deleteSkill: (id: string) => void;
+  addSkill: (employeeId: string, skill: Omit<Skill, "id">) => Skill;
+  updateSkill: (employeeId: string, skillId: string, updates: Partial<Skill>) => void;
+  deleteSkill: (employeeId: string, skillId: string) => void;
   addValidationRequest: (request: Omit<ValidationRequest, "id">) => void;
   updateValidationRequest: (
     id: string,
@@ -130,7 +128,6 @@ type DataActions = {
 const generateId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
 
 const initialState: DataState = {
-  employeeSkills: initialEmployeeSkills,
   validationRequests: initialValidationRequests,
   teamMembers: initialTeamMembers,
   skillCategories: initialSkillCategories,
@@ -146,27 +143,38 @@ export const useDataStore = create<DataState & DataActions>()(
     (set, get) => ({
       ...initialState,
 
-      addSkill(skill) {
+      addSkill(employeeId, skill) {
         const id = generateId();
         const newSkill: Skill = { ...skill, id } as Skill;
         set(state => ({
-          employeeSkills: [...state.employeeSkills, newSkill]
+          teamMembers: state.teamMembers.map(m =>
+            m.id === employeeId ? { ...m, skills: [...m.skills, newSkill] } : m
+          )
         }));
         get().recomputeChartData();
+        return newSkill;
       },
 
-      updateSkill(id, updates) {
+      updateSkill(employeeId, skillId, updates) {
         set(state => ({
-          employeeSkills: state.employeeSkills.map(s =>
-            s.id === id ? { ...s, ...updates } : s
+          teamMembers: state.teamMembers.map(m =>
+            m.id === employeeId
+              ? { ...m, skills: m.skills.map(s => (s.id === skillId ? { ...s, ...updates } : s)) }
+              : m
           )
         }));
         get().recomputeChartData();
       },
 
-      deleteSkill(id) {
+      deleteSkill(employeeId, skillId) {
         set(state => ({
-          employeeSkills: state.employeeSkills.filter(s => s.id !== id)
+          teamMembers: state.teamMembers.map(m =>
+            m.id === employeeId ? { ...m, skills: m.skills.filter(s => s.id !== skillId) } : m
+          ),
+          // FK cascade: remove validation requests that reference this skill so pending list stays in sync
+          validationRequests: state.validationRequests.filter(
+            r => !(r.employeeId === employeeId && r.skill?.id === skillId)
+          )
         }));
         get().recomputeChartData();
       },
@@ -186,17 +194,17 @@ export const useDataStore = create<DataState & DataActions>()(
         };
         set(state => {
           const req = state.validationRequests.find(r => r.id === id);
-          let nextEmployeeSkills = state.employeeSkills;
+          let nextTeamMembers = state.teamMembers;
           if (req && skillUpdates && req.skill?.id) {
-            nextEmployeeSkills = state.employeeSkills.map(s =>
-              s.id === req.skill.id ? { ...s, ...skillUpdates } : s
+            nextTeamMembers = state.teamMembers.map(m =>
+              m.id === req.employeeId
+                ? { ...m, skills: m.skills.map(s => (s.id === req.skill.id ? { ...s, ...skillUpdates } : s)) }
+                : m
             );
           }
           return {
-            validationRequests: state.validationRequests.map(r =>
-              r.id === id ? { ...r, ...requestUpdates } : r
-            ),
-            employeeSkills: nextEmployeeSkills
+            validationRequests: state.validationRequests.map(r => (r.id === id ? { ...r, ...requestUpdates } : r)),
+            teamMembers: nextTeamMembers
           };
         });
         get().recomputeChartData();
@@ -208,15 +216,22 @@ export const useDataStore = create<DataState & DataActions>()(
         if (!req) return;
         set({
           validationRequests: state.validationRequests.filter(r => r.id !== id),
-          employeeSkills: state.employeeSkills.map(s =>
-            s.id === req.skill?.id
+          teamMembers: state.teamMembers.map(m =>
+            m.id === req.employeeId
               ? {
-                  ...s,
-                  proficiencyLevel: adjustedLevel,
-                  validationStatus: "Validated" as ValidationStatus,
-                  feedback
+                  ...m,
+                  skills: m.skills.map(s =>
+                    s.id === req.skill?.id
+                      ? {
+                          ...s,
+                          proficiencyLevel: adjustedLevel,
+                          validationStatus: "Validated" as ValidationStatus,
+                          feedback
+                        }
+                      : s
+                  )
                 }
-              : s
+              : m
           )
         });
         get().recomputeChartData();
@@ -228,10 +243,17 @@ export const useDataStore = create<DataState & DataActions>()(
         if (!req) return;
         set({
           validationRequests: state.validationRequests.filter(r => r.id !== id),
-          employeeSkills: state.employeeSkills.map(s =>
-            s.id === req.skill?.id
-              ? { ...s, validationStatus: "Rejected" as ValidationStatus, feedback }
-              : s
+          teamMembers: state.teamMembers.map(m =>
+            m.id === req.employeeId
+              ? {
+                  ...m,
+                  skills: m.skills.map(s =>
+                    s.id === req.skill?.id
+                      ? { ...s, validationStatus: "Rejected" as ValidationStatus, feedback }
+                      : s
+                  )
+                }
+              : m
           )
         });
         get().recomputeChartData();
@@ -260,17 +282,17 @@ export const useDataStore = create<DataState & DataActions>()(
       },
 
       recomputeChartData() {
-        const { employeeSkills } = get();
+        const { teamMembers } = get();
+        const allSkills = teamMembers.flatMap(m => m.skills);
         set({
-          skillDistributionData: recomputeSkillDistribution(employeeSkills),
-          validationStatsData: recomputeValidationStats(employeeSkills)
+          skillDistributionData: recomputeSkillDistribution(allSkills),
+          validationStatsData: recomputeValidationStats(allSkills)
         });
       }
     }),
     {
       name: "skill-matrix-storage",
       partialize: (state) => ({
-        employeeSkills: state.employeeSkills,
         validationRequests: state.validationRequests,
         teamMembers: state.teamMembers,
         skillCategories: state.skillCategories,
@@ -279,7 +301,45 @@ export const useDataStore = create<DataState & DataActions>()(
         departmentSkillData: state.departmentSkillData,
         validationStatsData: state.validationStatsData,
         learningRecommendations: state.learningRecommendations
-      })
+      }),
+      merge: (persistedState, currentState) => {
+        const merged = {
+          ...currentState,
+          ...(typeof persistedState === "object" && persistedState !== null ? persistedState : {})
+        } as DataState & DataActions;
+        const team = merged.teamMembers ?? currentState.teamMembers;
+        const initialTeam = currentState.teamMembers;
+        let nextTeam = team;
+        if (!team.some((m: Employee) => m.id === "manager-001")) {
+          const managerEntry: Employee = {
+            id: "manager-001",
+            name: "John Doe",
+            role: "Manager",
+            department: "Management",
+            skills: []
+          };
+          nextTeam = [managerEntry, ...team];
+        }
+        // FK repair: ensure all employees from initial state keep their skills if persisted had empty
+        nextTeam = nextTeam.map(m => {
+          const initialMember = initialTeam.find((im: Employee) => im.id === m.id);
+          if (initialMember && initialMember.skills.length > 0 && m.skills.length === 0) {
+            return { ...m, skills: initialMember.skills };
+          }
+          return m;
+        });
+        const initialIds = new Set(initialTeam.map((m: Employee) => m.id));
+        const presentIds = new Set(nextTeam.map((m: Employee) => m.id));
+        for (const id of initialIds) {
+          if (id === "manager-001") continue;
+          if (!presentIds.has(id)) {
+            const initialMember = initialTeam.find((m: Employee) => m.id === id);
+            if (initialMember) nextTeam = [...nextTeam, initialMember];
+          }
+        }
+        merged.teamMembers = nextTeam;
+        return merged;
+      }
     }
   )
 );

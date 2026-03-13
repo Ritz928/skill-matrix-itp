@@ -10,6 +10,8 @@ type AddSkillModalProps = {
   isOpen: boolean;
   onClose: () => void;
   initialSkill?: Skill | null;
+  employeeId: string;
+  onSave: (savedSkill: Skill | undefined, requestValidation?: boolean) => void;
 };
 
 function getCategoryIdByName(skillCategories: ReturnType<typeof useDataStore.getState>["skillCategories"], name: string): string {
@@ -27,10 +29,10 @@ function getSubcategoryIdByName(
   return sub?.id ?? "";
 }
 
-export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalProps) {
-  const skillCategories = useDataStore(s => s.skillCategories);
-  const addSkill = useDataStore(s => s.addSkill);
-  const updateSkill = useDataStore(s => s.updateSkill);
+export function AddSkillModal({ isOpen, onClose, initialSkill, employeeId, onSave }: AddSkillModalProps) {
+  const skillCategories = useDataStore((s) => s.skillCategories);
+  const addSkill = useDataStore((s) => s.addSkill);
+  const updateSkill = useDataStore((s) => s.updateSkill);
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
@@ -39,6 +41,7 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
   const [yearsOfExperience, setYearsOfExperience] = useState("");
   const [lastUsed, setLastUsed] = useState("");
   const [projectTagsInput, setProjectTagsInput] = useState("");
+  const [submitForValidation, setSubmitForValidation] = useState(true);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -50,6 +53,7 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
       setYearsOfExperience(String(initialSkill.yearsOfExperience ?? ""));
       setLastUsed(initialSkill.lastUsed ?? "");
       setProjectTagsInput((initialSkill.projectTags ?? []).join(", "));
+      setSubmitForValidation(false);
     } else {
       setSelectedCategory("");
       setSelectedSubcategory("");
@@ -58,6 +62,7 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
       setYearsOfExperience("");
       setLastUsed("");
       setProjectTagsInput("");
+      setSubmitForValidation(true);
     }
   }, [isOpen, initialSkill, skillCategories]);
 
@@ -69,7 +74,7 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
   const handleSubmit = () => {
     if (!selectedSkill || !category || !subcategory) return;
     const projectTags = projectTagsInput
-      ? projectTagsInput.split(",").map(s => s.trim()).filter(Boolean)
+      ? projectTagsInput.split(",").map((s) => s.trim()).filter(Boolean)
       : [];
     const skillPayload = {
       name: selectedSkill,
@@ -77,7 +82,7 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
       subcategory: subcategory.name,
       description: "",
       proficiencyLevel,
-      validationStatus: initialSkill?.validationStatus ?? ("Self-assessed" as const),
+      validationStatus: (initialSkill?.validationStatus ?? "Self-assessed") as Skill["validationStatus"],
       lastUpdated: new Date().toISOString().slice(0, 10),
       yearsOfExperience: yearsOfExperience ? Number(yearsOfExperience) : undefined,
       lastUsed: lastUsed || undefined,
@@ -87,9 +92,13 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
     };
 
     if (initialSkill) {
-      updateSkill(initialSkill.id, skillPayload);
+      updateSkill(employeeId, initialSkill.id, skillPayload);
+      const updatedSkill: Skill = { ...initialSkill, ...skillPayload };
+      onSave(updatedSkill, submitForValidation);
     } else {
-      addSkill({ ...skillPayload, validationStatus: "Pending validation" });
+      const payloadWithStatus = { ...skillPayload, validationStatus: "Self-assessed" as const };
+      const newSkill = addSkill(employeeId, payloadWithStatus);
+      onSave(newSkill, submitForValidation);
     }
     onClose();
   };
@@ -260,6 +269,21 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
               Separate multiple projects with commas
             </p>
           </div>
+
+          {(!initialSkill || initialSkill.validationStatus === "Self-assessed") && (
+            <div className="flex items-center gap-2">
+              <input
+                id="add-skill-submit-validation"
+                type="checkbox"
+                checked={submitForValidation}
+                onChange={(e) => setSubmitForValidation(e.target.checked)}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="add-skill-submit-validation" className="text-sm text-gray-700">
+                Submit for validation after saving
+              </label>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
@@ -274,7 +298,7 @@ export function AddSkillModal({ isOpen, onClose, initialSkill }: AddSkillModalPr
             disabled={!selectedSkill || !selectedCategory || !selectedSubcategory}
             className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {initialSkill ? "Save Changes" : "Submit for Validation"}
+            {initialSkill ? "Save Changes" : "Add Skill"}
           </button>
         </div>
       </div>

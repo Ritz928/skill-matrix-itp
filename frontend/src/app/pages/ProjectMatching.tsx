@@ -8,10 +8,13 @@ import { useDataStore } from "../store/dataStore";
 import type { Project } from "../store/dataStore";
 
 const matchScores = [
-  { employeeId: "e2", score: 95 },
-  { employeeId: "e1", score: 85 },
-  { employeeId: "e3", score: 75 },
-  { employeeId: "e4", score: 60 },
+  { employeeId: "emp-002", score: 95 },
+  { employeeId: "emp-001", score: 85 },
+  { employeeId: "emp-003", score: 75 },
+  { employeeId: "emp-004", score: 60 },
+  { employeeId: "emp-008", score: 92 },
+  { employeeId: "emp-006", score: 70 },
+  { employeeId: "emp-010", score: 78 },
 ];
 
 export function ProjectMatching() {

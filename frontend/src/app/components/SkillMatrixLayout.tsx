@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Outlet, Link, useLocation } from "react-router";
+import { Outlet, Link, useLocation, useNavigate } from "react-router";
 import {
   LayoutDashboard,
   User,
@@ -11,13 +11,14 @@ import {
   GraduationCap,
   ChevronLeft,
   ChevronRight,
-  Menu,
   Bell,
   Settings,
-  Search
+  Search,
+  LogOut
 } from "lucide-react";
+import { useAuthStore } from "../store/authStore";
 
-const navigationItems = [
+const managerNavigationItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
   { path: "/employee-skills", label: "Employee Skills", icon: User },
   { path: "/team-skills", label: "Team Skills", icon: Users },
@@ -28,9 +29,30 @@ const navigationItems = [
   { path: "/learning-development", label: "Learning & Development", icon: GraduationCap }
 ];
 
+const employeeNavigationItems = [
+  { path: "/employee-skills", label: "My Skill Profile", icon: User }
+];
+
 export function SkillMatrixLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
+
+  const navigationItems = user?.role === "Employee" ? employeeNavigationItems : managerNavigationItems;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
+  const initials = user?.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase() ?? "?";
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -116,12 +138,20 @@ export function SkillMatrixLayout() {
               <Settings className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+                aria-label="Log out"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log out</span>
+              </button>
               <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-medium">
-                JD
+                {initials}
               </div>
               <div className="hidden md:block">
-                <div className="text-sm font-medium text-gray-900">John Doe</div>
-                <div className="text-xs text-gray-500">Manager</div>
+                <div className="text-sm font-medium text-gray-900">{user?.name ?? "User"}</div>
+                <div className="text-xs text-gray-500">{user?.role ?? ""}</div>
               </div>
             </div>
           </div>
