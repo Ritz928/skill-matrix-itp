@@ -30,6 +30,10 @@ analytics have no reliable source of truth.
 attach evidence, submit for validation, and see the skill’s current validation status reflected in my
 profile.
 
+**Wireframes**:
+
+- [Figma — My Skill Profile](https://www.figma.com/design/5zpVONvOAtPCncj4GRuc70/ITP---Skill-Matrix?node-id=1-785&t=cVJtNUfO8KKZcpT5-0)
+
 **Acceptance Scenarios**:
 
 1. **Given** an employee is signed in and has an empty skill profile, **When** they add a skill from
@@ -57,6 +61,10 @@ reduce inflated or inconsistent self-assessments.
 request, review evidence, approve/adjust proficiency, and see the result reflected in both the
 employee’s profile and my team view.
 
+**Wireframes**:
+
+- [Figma — Skill Validation](https://www.figma.com/design/5zpVONvOAtPCncj4GRuc70/ITP---Skill-Matrix?node-id=1-1243&t=cVJtNUfO8KKZcpT5-0)
+
 **Acceptance Scenarios**:
 
 1. **Given** a manager has a pending skill validation request, **When** they approve it as
@@ -80,6 +88,10 @@ thing across departments and time.
 **Independent Test**: Using an admin account, I can create a category, subcategory, and skill with
 definitions; update a definition; and see the updated taxonomy reflected for employees.
 
+**Wireframes**:
+
+- [Figma — Skill Taxonomy (screen link provided)](https://www.figma.com/design/5zpVONvOAtPCncj4GRuc70/ITP---Skill-Matrix?node-id=1-395&t=cVJtNUfO8KKZcpT5-0)
+
 **Acceptance Scenarios**:
 
 1. **Given** an admin is editing taxonomy, **When** they create a new skill with a definition under
@@ -99,6 +111,11 @@ into workforce insights and actions.
 
 **Independent Test**: Using a leadership account, I can open a heatmap for a department, drill down
 to teams, and export a team capability report.
+
+**Wireframes**:
+
+- [Figma — Skill Analytics Dashboard](https://www.figma.com/design/5zpVONvOAtPCncj4GRuc70/ITP---Skill-Matrix?node-id=1-1984&t=cVJtNUfO8KKZcpT5-0)
+- [Figma — Skill Matrix Dashboard (overview)](https://www.figma.com/design/5zpVONvOAtPCncj4GRuc70/ITP---Skill-Matrix?node-id=1-5&t=cVJtNUfO8KKZcpT5-0)
 
 **Acceptance Scenarios**:
 
@@ -121,6 +138,11 @@ and development rather than a static directory.
 
 **Independent Test**: Using project allocation and learning/development entry points, I can view
 skill-based matches and gap-driven recommendations without duplicating skill data entry.
+
+**Wireframes**:
+
+- [Figma — Project Skill Matching](https://www.figma.com/design/5zpVONvOAtPCncj4GRuc70/ITP---Skill-Matrix?node-id=1-2488&t=cVJtNUfO8KKZcpT5-0)
+- [Figma — Learning & Development (skills-to-learning)](https://www.figma.com/design/5zpVONvOAtPCncj4GRuc70/ITP---Skill-Matrix?node-id=1-3036&t=cVJtNUfO8KKZcpT5-0)
 
 **Acceptance Scenarios**:
 
