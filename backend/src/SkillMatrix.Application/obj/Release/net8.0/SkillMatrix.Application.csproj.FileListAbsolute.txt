@@ -1,0 +1,16 @@
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.csproj.AssemblyReference.cache
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.AssemblyInfoInputs.cache
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.AssemblyInfo.cs
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.csproj.CoreCompileInputs.cache
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.sourcelink.json
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\bin\Release\net8.0\SkillMatrix.Application.deps.json
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\bin\Release\net8.0\SkillMatrix.Application.dll
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\bin\Release\net8.0\SkillMatrix.Application.pdb
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\bin\Release\net8.0\SkillMatrix.Domain.dll
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\bin\Release\net8.0\SkillMatrix.Domain.pdb
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMat.4347913C.Up2Date
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.dll
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\refint\SkillMatrix.Application.dll
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\SkillMatrix.Application.pdb
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Application\obj\Release\net8.0\ref\SkillMatrix.Application.dll

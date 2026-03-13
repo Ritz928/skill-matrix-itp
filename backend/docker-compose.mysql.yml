@@ -1,0 +1,18 @@
+name: skill-matrix
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: skill-matrix-mysql
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: skillmatrix_root
+      MYSQL_DATABASE: skill_matrix
+    volumes:
+      - skill_matrix_mysql_data:/var/lib/mysql
+
+volumes:
+  skill_matrix_mysql_data:
+

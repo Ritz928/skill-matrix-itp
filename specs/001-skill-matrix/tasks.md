@@ -28,13 +28,13 @@ description: "Task list for Skill Matrix module implementation"
 
 **Purpose**: Initialize repository structure and baseline tooling
 
-- [X] T001 Create repo directory skeleton per `specs/001-skill-matrix/plan.md` in `backend/` and `frontend/`
-- [X] T002 Initialize .NET solution in `backend/src/SkillMatrix.sln` with projects under `backend/src/SkillMatrix.{Api,Application,Domain,Infrastructure}/`
-- [X] T003 Initialize React workspace under `frontend/` and create feature skeleton under `frontend/src/features/skill-matrix/`
-- [ ] T004 [P] Add backend formatting rules/config (e.g., `.editorconfig`) at `backend/.editorconfig`
-- [X] T005 [P] Add frontend lint/format config at `frontend/.eslintrc.*` and `frontend/.prettierrc.*`
-- [X] T006 [P] Add local env example files at `backend/.env.example` and `frontend/.env.example`
-- [ ] T007 [P] Add MySQL local dev compose file at `backend/docker-compose.mysql.yml`
+- [x] T001 Create repo directory skeleton per `specs/001-skill-matrix/plan.md` in `backend/` and `frontend/`
+- [x] T002 Initialize .NET solution in `backend/src/SkillMatrix.sln` with projects under `backend/src/SkillMatrix.{Api,Application,Domain,Infrastructure}/`
+- [x] T003 Initialize React workspace under `frontend/` and create feature skeleton under `frontend/src/features/skill-matrix/`
+- [x] T004 [P] Add backend formatting rules/config (e.g., `.editorconfig`) at `backend/.editorconfig`
+- [x] T005 [P] Add frontend lint/format config at `frontend/.eslintrc.*` and `frontend/.prettierrc.*`
+- [x] T006 [P] Add local env example files at `backend/.env.example` and `frontend/.env.example`
+- [x] T007 [P] Add MySQL local dev compose file at `backend/docker-compose.mysql.yml`
 - [ ] T008 [P] Add module README for developers at `specs/001-skill-matrix/README.md` (links to plan/spec/quickstart)
 
 ---
@@ -45,23 +45,23 @@ description: "Task list for Skill Matrix module implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T009 Create EF Core persistence baseline in `backend/src/SkillMatrix.Infrastructure/Persistence/SkillMatrixDbContext.cs`
-- [ ] T010 Create initial migrations folder and migrations runner in `backend/src/SkillMatrix.Infrastructure/Persistence/Migrations/`
-- [ ] T011 Implement ITP auth integration + RBAC policies in `backend/src/SkillMatrix.Api/Auth/AuthorizationPolicies.cs`
-- [ ] T012 Implement API error envelope + exception middleware in `backend/src/SkillMatrix.Api/Middleware/ErrorHandlingMiddleware.cs`
-- [ ] T013 Implement correlation ID + structured logging middleware in `backend/src/SkillMatrix.Api/Middleware/CorrelationIdMiddleware.cs`
-- [ ] T014 Implement audit logging abstraction in `backend/src/SkillMatrix.Application/Audit/IAuditLogger.cs`
-- [ ] T015 Implement audit log persistence in `backend/src/SkillMatrix.Infrastructure/Audit/AuditLogger.cs`
-- [ ] T016 Implement outbox table + publisher abstraction in `backend/src/SkillMatrix.Application/Outbox/IOutboxPublisher.cs`
-- [ ] T017 Implement outbox persistence + dispatcher in `backend/src/SkillMatrix.Infrastructure/Outbox/OutboxDispatcher.cs`
-- [ ] T018 Implement event contracts mapping in `backend/src/SkillMatrix.Application/Events/SkillMatrixEventMapper.cs`
-- [ ] T019 Implement background job hooks for exports/expiry in `backend/src/SkillMatrix.Infrastructure/Jobs/`
-- [ ] T020 Implement file storage adapter for evidence uploads in `backend/src/SkillMatrix.Infrastructure/Files/EvidenceFileStore.cs`
-- [ ] T021 Implement base API routing and version prefix in `backend/src/SkillMatrix.Api/Program.cs`
-- [X] T022 Implement frontend API client wrapper and error handling in `frontend/src/services/httpClient.ts`
-- [X] T023 Implement frontend auth integration wrapper in `frontend/src/services/auth.ts`
-- [X] T024 Implement shared frontend types for API payloads in `frontend/src/features/skill-matrix/types/contracts.ts`
-- [ ] T025 Create foundational database schema migration for core tables in `backend/src/SkillMatrix.Infrastructure/Persistence/Migrations/0001_initial_skill_matrix.sql`
+- [x] T009 Create EF Core persistence baseline in `backend/src/SkillMatrix.Infrastructure/Persistence/SkillMatrixDbContext.cs`
+- [x] T010 Create initial migrations folder and migrations runner in `backend/src/SkillMatrix.Infrastructure/Persistence/Migrations/`
+- [x] T011 Implement ITP auth integration + RBAC policies in `backend/src/SkillMatrix.Api/Auth/AuthorizationPolicies.cs`
+- [x] T012 Implement API error envelope + exception middleware in `backend/src/SkillMatrix.Api/Middleware/ErrorHandlingMiddleware.cs`
+- [x] T013 Implement correlation ID + structured logging middleware in `backend/src/SkillMatrix.Api/Middleware/CorrelationIdMiddleware.cs`
+- [x] T014 Implement audit logging abstraction in `backend/src/SkillMatrix.Application/Audit/IAuditLogger.cs`
+- [x] T015 Implement audit log persistence in `backend/src/SkillMatrix.Infrastructure/Audit/AuditLogger.cs`
+- [x] T016 Implement outbox table + publisher abstraction in `backend/src/SkillMatrix.Application/Outbox/IOutboxPublisher.cs`
+- [x] T017 Implement outbox persistence + dispatcher in `backend/src/SkillMatrix.Infrastructure/Outbox/OutboxDispatcher.cs`
+- [x] T018 Implement event contracts mapping in `backend/src/SkillMatrix.Application/Events/SkillMatrixEventMapper.cs`
+- [x] T019 Implement background job hooks for exports/expiry in `backend/src/SkillMatrix.Infrastructure/Jobs/`
+- [x] T020 Implement file storage adapter for evidence uploads in `backend/src/SkillMatrix.Infrastructure/Files/EvidenceFileStore.cs`
+- [x] T021 Implement base API routing and version prefix in `backend/src/SkillMatrix.Api/Program.cs`
+- [x] T022 Implement frontend API client wrapper and error handling in `frontend/src/services/httpClient.ts`
+- [x] T023 Implement frontend auth integration wrapper in `frontend/src/services/auth.ts`
+- [x] T024 Implement shared frontend types for API payloads in `frontend/src/features/skill-matrix/types/contracts.ts`
+- [x] T025 Create foundational database schema migration for core tables in `backend/src/SkillMatrix.Infrastructure/Persistence/Migrations/0001_initial_skill_matrix.sql`
 
 **Checkpoint**: Foundation ready — feature work can now proceed by user story
 
@@ -75,33 +75,33 @@ description: "Task list for Skill Matrix module implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T026 [P] [US1] Implement taxonomy read models in `backend/src/SkillMatrix.Application/Taxonomy/Queries/GetTaxonomyQuery.cs`
-- [ ] T027 [US1] Implement taxonomy query handler in `backend/src/SkillMatrix.Application/Taxonomy/Queries/GetTaxonomyQueryHandler.cs`
-- [ ] T028 [US1] Implement `GET /api/v1/skill-matrix/taxonomy` in `backend/src/SkillMatrix.Api/Controllers/TaxonomyController.cs`
+- [x] T026 [P] [US1] Implement taxonomy read models in `backend/src/SkillMatrix.Application/Taxonomy/Queries/GetTaxonomyQuery.cs`
+- [x] T027 [US1] Implement taxonomy query handler in `backend/src/SkillMatrix.Application/Taxonomy/Queries/GetTaxonomyQueryHandler.cs`
+- [x] T028 [US1] Implement `GET /api/v1/skill-matrix/taxonomy` in `backend/src/SkillMatrix.Api/Controllers/TaxonomyController.cs`
 
-- [ ] T029 [P] [US1] Implement employee skill domain entity in `backend/src/SkillMatrix.Domain/Employees/EmployeeSkill.cs`
-- [ ] T030 [P] [US1] Implement validation status value object in `backend/src/SkillMatrix.Domain/Validation/ValidationStatus.cs`
-- [ ] T031 [P] [US1] Implement evidence entity in `backend/src/SkillMatrix.Domain/Evidence/EvidenceItem.cs`
-- [ ] T032 [US1] Implement employee skill persistence mapping in `backend/src/SkillMatrix.Infrastructure/Persistence/Configurations/EmployeeSkillConfiguration.cs`
-- [ ] T033 [US1] Implement evidence persistence mapping in `backend/src/SkillMatrix.Infrastructure/Persistence/Configurations/EvidenceItemConfiguration.cs`
+- [x] T029 [P] [US1] Implement employee skill domain entity in `backend/src/SkillMatrix.Domain/Employees/EmployeeSkill.cs`
+- [x] T030 [P] [US1] Implement validation status value object in `backend/src/SkillMatrix.Domain/Validation/ValidationStatus.cs`
+- [x] T031 [P] [US1] Implement evidence entity in `backend/src/SkillMatrix.Domain/Evidence/EvidenceItem.cs`
+- [x] T032 [US1] Implement employee skill persistence mapping in `backend/src/SkillMatrix.Infrastructure/Persistence/Configurations/EmployeeSkillConfiguration.cs`
+- [x] T033 [US1] Implement evidence persistence mapping in `backend/src/SkillMatrix.Infrastructure/Persistence/Configurations/EvidenceItemConfiguration.cs`
 
-- [ ] T034 [P] [US1] Implement `GET /me/skills` query contract in `backend/src/SkillMatrix.Application/Employees/Queries/GetMySkillsQuery.cs`
-- [ ] T035 [US1] Implement `GET /me/skills` handler in `backend/src/SkillMatrix.Application/Employees/Queries/GetMySkillsQueryHandler.cs`
-- [ ] T036 [US1] Implement `GET /api/v1/skill-matrix/me/skills` in `backend/src/SkillMatrix.Api/Controllers/MySkillsController.cs`
+- [x] T034 [P] [US1] Implement `GET /me/skills` query contract in `backend/src/SkillMatrix.Application/Employees/Queries/GetMySkillsQuery.cs`
+- [x] T035 [US1] Implement `GET /me/skills` handler in `backend/src/SkillMatrix.Application/Employees/Queries/GetMySkillsQueryHandler.cs`
+- [x] T036 [US1] Implement `GET /api/v1/skill-matrix/me/skills` in `backend/src/SkillMatrix.Api/Controllers/MySkillsController.cs`
 
-- [ ] T037 [P] [US1] Implement add/update skill command in `backend/src/SkillMatrix.Application/Employees/Commands/UpsertMySkillCommand.cs`
-- [ ] T038 [US1] Implement add/update skill handler in `backend/src/SkillMatrix.Application/Employees/Commands/UpsertMySkillCommandHandler.cs`
-- [ ] T039 [US1] Implement `POST /me/skills` and `PATCH /me/skills/{id}` in `backend/src/SkillMatrix.Api/Controllers/MySkillsController.cs`
-- [ ] T040 [US1] Emit `SkillMatrix.SkillChanged` via outbox in `backend/src/SkillMatrix.Application/Employees/Events/SkillChangedPublisher.cs`
+- [x] T037 [P] [US1] Implement add/update skill command in `backend/src/SkillMatrix.Application/Employees/Commands/UpsertMySkillCommand.cs`
+- [x] T038 [US1] Implement add/update skill handler in `backend/src/SkillMatrix.Application/Employees/Commands/UpsertMySkillCommandHandler.cs`
+- [x] T039 [US1] Implement `POST /me/skills` and `PATCH /me/skills/{id}` in `backend/src/SkillMatrix.Api/Controllers/MySkillsController.cs`
+- [x] T040 [US1] Emit `SkillMatrix.SkillChanged` via outbox in `backend/src/SkillMatrix.Application/Employees/Events/SkillChangedPublisher.cs`
 
-- [ ] T041 [P] [US1] Implement upload evidence command in `backend/src/SkillMatrix.Application/Evidence/Commands/AddEvidenceCommand.cs`
-- [ ] T042 [US1] Implement upload evidence handler in `backend/src/SkillMatrix.Application/Evidence/Commands/AddEvidenceCommandHandler.cs`
-- [ ] T043 [US1] Implement `POST /me/skills/{employeeSkillId}/evidence` in `backend/src/SkillMatrix.Api/Controllers/EvidenceController.cs`
+- [x] T041 [P] [US1] Implement upload evidence command in `backend/src/SkillMatrix.Application/Evidence/Commands/AddEvidenceCommand.cs`
+- [x] T042 [US1] Implement upload evidence handler in `backend/src/SkillMatrix.Application/Evidence/Commands/AddEvidenceCommandHandler.cs`
+- [x] T043 [US1] Implement `POST /me/skills/{employeeSkillId}/evidence` in `backend/src/SkillMatrix.Api/Controllers/EvidenceController.cs`
 
-- [ ] T044 [P] [US1] Implement submit validation request command in `backend/src/SkillMatrix.Application/Validation/Commands/SubmitValidationRequestCommand.cs`
-- [ ] T045 [US1] Implement submit validation request handler in `backend/src/SkillMatrix.Application/Validation/Commands/SubmitValidationRequestCommandHandler.cs`
-- [ ] T046 [US1] Implement `POST /me/skills/{employeeSkillId}/validation-requests` in `backend/src/SkillMatrix.Api/Controllers/ValidationRequestsController.cs`
-- [ ] T047 [US1] Emit `SkillMatrix.ValidationRequested` via outbox in `backend/src/SkillMatrix.Application/Validation/Events/ValidationRequestedPublisher.cs`
+- [x] T044 [P] [US1] Implement submit validation request command in `backend/src/SkillMatrix.Application/Validation/Commands/SubmitValidationRequestCommand.cs`
+- [x] T045 [US1] Implement submit validation request handler in `backend/src/SkillMatrix.Application/Validation/Commands/SubmitValidationRequestCommandHandler.cs`
+- [x] T046 [US1] Implement `POST /me/skills/{employeeSkillId}/validation-requests` in `backend/src/SkillMatrix.Api/Controllers/ValidationRequestsController.cs`
+- [x] T047 [US1] Emit `SkillMatrix.ValidationRequested` via outbox in `backend/src/SkillMatrix.Application/Validation/Events/ValidationRequestedPublisher.cs`
 
 - [X] T048 [P] [US1] Create Skill Matrix route entry and nav link in `frontend/src/app/routes.tsx`
 - [X] T049 [US1] Implement My Skills page in `frontend/src/features/skill-matrix/pages/MySkillsPage.tsx`

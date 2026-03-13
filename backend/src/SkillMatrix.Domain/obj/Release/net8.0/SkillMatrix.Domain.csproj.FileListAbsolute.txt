@@ -1,0 +1,12 @@
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\bin\Release\net8.0\SkillMatrix.Domain.deps.json
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\bin\Release\net8.0\SkillMatrix.Domain.dll
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\bin\Release\net8.0\SkillMatrix.Domain.pdb
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\SkillMatrix.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\SkillMatrix.Domain.AssemblyInfoInputs.cache
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\SkillMatrix.Domain.AssemblyInfo.cs
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\SkillMatrix.Domain.csproj.CoreCompileInputs.cache
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\SkillMatrix.Domain.sourcelink.json
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\SkillMatrix.Domain.dll
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\refint\SkillMatrix.Domain.dll
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\SkillMatrix.Domain.pdb
+C:\Users\RiteshPokalwar\skill-matrix-itp\backend\src\SkillMatrix.Domain\obj\Release\net8.0\ref\SkillMatrix.Domain.dll
