@@ -2,34 +2,31 @@
 ==============================================================================
 SYNC IMPACT REPORT
 ==============================================================================
-Version change: 1.1.1 → 1.1.2
-Bump rationale: PATCH — Clarified approved technology stack in Technical
-  Standards & Constraints (React frontend, .NET backend, SQL database).
+Version change: 1.1.2 → 1.2.0
+Bump rationale: MINOR — Material expansion of Testing Discipline: frontend
+  page components (e.g. EmployeeSkills.tsx) MUST have unit tests using React
+  Testing Library; explicit RTL and page-level requirement added.
 
 Modified principles:
-  - N/A (wording/structure only)
+  - N/A (Technical Standards & Constraints — Testing Discipline expanded)
 
 Added sections:
-  - Table of contents
+  - N/A
 
 Removed sections:
-  - N/A (template placeholders replaced, no sections removed)
+  - N/A
 
 Template consistency review:
-  ✅ plan-template.md     — "Constitution Check" gate is generic and compatible
-                            with all 6 principles; no updates required.
-  ✅ spec-template.md     — Mandatory sections (User Scenarios, Requirements,
-                            Success Criteria) align with Principles I–VI;
-                            no structural changes required.
-  ✅ tasks-template.md    — Phase structure (Setup → Foundational → User Story
-                            phases → Polish) supports security hardening,
-                            integration, and analytics tasks; no updates required.
+  ✅ plan-template.md     — Constitution Check gate remains generic; no updates
+                            required.
+  ✅ spec-template.md     — Mandatory sections unchanged; no updates required.
+  ✅ tasks-template.md    — Phase structure supports test tasks; note added
+                            that constitution-mandated unit tests (e.g. RTL
+                            for frontend pages) MUST be included when applicable.
 
 Deferred TODOs:
-  - RATIFICATION_DATE is set to today (2026-03-11) as first authoring date;
-    update if a formal governance approval meeting is held on a different date.
-  - Integration adapter targets (HR system names, LMS vendor) are left as
-    open-ended in Principle VI; specify concrete vendor names when known.
+  - RATIFICATION_DATE (2026-03-11); update if governance approval differs.
+  - Integration adapter targets (Principle VI) — specify vendor names when known.
 ==============================================================================
 -->
 
@@ -295,9 +292,12 @@ Rules for UI text:
   export performed) MUST be emitted as platform events for observability
   dashboards.
 - **Testing Discipline**: Unit tests are required for all business logic.
-  Integration tests are required for all API contracts and cross-module event
-  handlers. Test coverage MUST not regress below the baseline established at
-  feature delivery.
+  Frontend page and key view components (e.g. `EmployeeSkills.tsx` and peer
+  pages) MUST have unit tests written with **React Testing Library**; tests
+  MUST assert rendering, user interactions, and integration with application
+  state (e.g. stores) as appropriate. Integration tests are required for all
+  API contracts and cross-module event handlers. Test coverage MUST not
+  regress below the baseline established at feature delivery.
 
 ## Development Workflow & Quality Gates
 
@@ -353,4 +353,4 @@ team agreements, or prior documentation that conflicts with its content.
 - Violations discovered during audit MUST be tracked as remediation tasks and
   scheduled within the next sprint cycle.
 
-**Version**: 1.1.2 | **Ratified**: 2026-03-11 | **Last Amended**: 2026-03-12
+**Version**: 1.2.0 | **Ratified**: 2026-03-11 | **Last Amended**: 2026-03-14
